@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    container_name: mysql
+    image: mysql:8.1
+    volumes:
+      # - mysql_volume:/var/lib/mysql
+      - ./SqlData/mysql_data_volume:/var/lib/mysql
+      - ./SqlData/mysql_log_volume:/var/lib/mysql
+      - ./SqlData/mysql_secrets_volume:/var/lib/mysql
+    ports:
+     - 3307:3306
+    networks:
+      - mysql_network
+  
+  redis:
+    image: redis:6.0.7
+    container_name: redis
+    restart: always
+    volumes:
+      - redis_volume_data:/data
+    ports:
+    - 6379:6379
+
+  redis_insight:
+    image: redislabs/redisinsight:latest
+    container_name: redis_insight
+    restart: always
+    ports:
+      - 5505:8001
+    volumes:
+    - redis_insight_volume_data:/db
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:  
+    
+networks:
+  mysql_network:
+
+# volumes:
+#   mysql_data_volume:
+#   mysql_log_volume:
+#   mysql_secrets_volume:
