@@ -19,4 +19,5 @@ def request_adapter(request: FlaskRequest = None, controller: Callable = None) -
     )
 
     http_response = controller(http_request)
+
     return http_response

@@ -126,7 +126,7 @@ class UserRepository(IUserRepository):
         with ApplicationDbContext() as database:
 
             userDTO = UserDTO(user.Id, user.Name, user.Email,
-                              None, None, None, None).to_dict()
+                              None, None, None, None, None).to_dict()
 
             try:
                 database.session.begin()

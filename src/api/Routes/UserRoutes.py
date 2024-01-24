@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 
 from src.api.Adapters.RequestAdapter import request_adapter
-from src.infraioc.DependencyInjection import UserControllerInjection
 from src.infradata.TokenVerify.TokenVerifies import token_verify
+from src.infraioc.DependencyInjection import UserControllerInjection
 
 user_routes_bp = Blueprint("user_routes", __name__)
 

@@ -32,8 +32,6 @@ class UserAuthenticationService(IUserAuthenticationService):
         if password_user_send != password_database_hash:
             return ResponseWrapper.fail("Password Invalid")
 
-        # proxima coisa criar 'permission' do usuario para colocar dentro do token que vai ser gerado
-
         response_permissions = self.__user_permission_service.get_all_permission_user(
             user.Id)
 

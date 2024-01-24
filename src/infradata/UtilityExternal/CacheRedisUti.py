@@ -22,7 +22,6 @@ class CacheRedisUti(ICacheRedisUti):
 
     def set_string_async_wrapper(cls, key: str, value: str) -> bool:
         result: bool = redis_connection.set(key, value)
-        print(result)
 
     def set_string_async_wrapper_expiry(cls, key: str, value: str, expiry_seconds: int) -> bool:
         result: bool = redis_connection.set(key, value, expiry_seconds)

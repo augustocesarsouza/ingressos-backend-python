@@ -11,19 +11,12 @@ class CodeRandomDictionary:
         else:
             self.DictionaryCode[id_guid] = value_code
 
-        print(self.DictionaryCode)
-
     def container(self, guid_id: str, value_code: int) -> bool:
         if guid_id in self.DictionaryCode:
             value = self.DictionaryCode[guid_id]
-            print(value)
-            print(value_code)
 
             if int(value) == int(value_code):
-                print(self.DictionaryCode)
-                print("True")
                 return True
-        print("False")
         return False
 
     def remove(self, id_guid: str):

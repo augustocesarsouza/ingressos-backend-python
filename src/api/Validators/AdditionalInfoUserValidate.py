@@ -1,15 +1,22 @@
 from cerberus import Validator
 from src.application.Services.ResponseWrapper import ResponseWrapper
+from datetime import datetime
 
 
-def user_create_validate(body: any):
+def custom_date_coercion(value):
+    try:
+        # Tenta converter a string de data para o formato desejado
+        return datetime.strptime(value, "%d/%m/%Y")
+    except ValueError:
+        # Se a conversão falhar, retorna None ou levanta uma exceção, dependendo da sua lógica
+        return None
+
+
+def user_update_validate(body: any):
 
     body_validator = Validator({
-        "name": {"type": "string", 'minlength': 1, "required": True, "empty": False},
-        "email": {"type": "string", "required": True, "empty": False},
-        "cpf": {"type": "string",  'minlength': 11, "required": True, "empty": False},
-        "password": {"type": "string", 'minlength': 12, "required": True, "empty": False},
-        "birthDateString": {"type": "string", "required": True, "empty": True},
+        "userId": {"type": "string", 'minlength': 36, "required": True, "empty": False},
+        "birthDateString": {"type": "datetime", "required": True, "empty": True, "coerce": custom_date_coercion},
         "gender": {"type": "string", "required": True, "empty": True},
         "phone": {"type": "string", "required": True, "empty": True},
         "cep": {"type": "string", "required": True, "empty": True},

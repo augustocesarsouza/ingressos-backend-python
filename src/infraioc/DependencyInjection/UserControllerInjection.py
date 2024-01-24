@@ -1,8 +1,10 @@
 from src.api.Controllers.UserController import UserController
 from src.api.ControllersInterface.IUserController import IUserController
+from src.application.Services.AdditionalInfoUserService import AdditionalInfoUserService
 from src.application.Services.UserConfirmationService import UserConfirmationService
 from src.application.Services.UserPermissionService import UserPermissionService
 from src.infradata.Authentication.TokenGeneratorEmail import TokenGeneratorEmail
+from src.infradata.Repositories.AdditionalInfoUserRepository import AdditionalInfoUserRepository
 from src.infradata.Repositories.UserPermissionRepository import UserPermissionRepository
 from src.infradata.Repositories.UserRepository import UserRepository
 from src.application.Services.UserManagementService import UserManagementService
@@ -18,7 +20,12 @@ def user_menagement_controller_injection() -> IUserController:
     cache_redis = CacheRedisUti()
     send_email_brevo = SendEmailBrevo()
     send_email_user = SendEmailUser(cache_redis, send_email_brevo)
-    user_service = UserManagementService(repository, send_email_user)
+    send_email_user = SendEmailUser(cache_redis, send_email_brevo)
+    additional_info_user_repository = AdditionalInfoUserRepository()
+    additional_info_user_service = AdditionalInfoUserService(
+        additional_info_user_repository)
+    user_service = UserManagementService(
+        repository, send_email_user, additional_info_user_service)
 
     user_permission_repository = UserPermissionRepository()
     user_permission_service = UserPermissionService(user_permission_repository)

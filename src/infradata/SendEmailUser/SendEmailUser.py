@@ -33,6 +33,7 @@ class SendEmailUser(ISendEmailUser):
             '6400',
             token
         )
+
         result_send = self.__send_email_brevo.send_email(user, url)
 
         return result_send
