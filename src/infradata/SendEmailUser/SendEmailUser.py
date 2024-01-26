@@ -2,7 +2,7 @@ from src.infradata.SendEmailUser.Interface.ISendEmailUser import ISendEmailUser
 from src.infradata.UtilityExternal.Interface.ICacheRedisUti import ICacheRedisUti
 from src.infradata.UtilityExternal.Interface.ISendEmailBrevo import ISendEmailBrevo
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
@@ -16,12 +16,12 @@ class SendEmailUser(ISendEmailUser):
         cache = self.__cache_redis.get_string_async_wrapper(chave_key)
 
         token = jwt.encode({
-            'exp': datetime.utcnow() + timedelta(minutes=60),
+            'exp': datetime.now(timezone.utc) + timedelta(minutes=10),
             "id": user['id'],
         }, key="seilakey123seilakey", algorithm="HS256")
 
-        # if not len(token) > 0:
-        #     return ResponseWrapper.fail("Error to create token")
+        if not len(token) > 0:
+            return ResponseWrapper.fail("Error to create token")
 
         if cache == None:
             self.__cache_redis.set_string_async_wrapper_expiry(

@@ -1,5 +1,6 @@
 from src.api.Controllers.UserController import UserController
 from src.api.ControllersInterface.IUserController import IUserController
+from src.api.Validators.UserCreateValidate import UserCreateValidate
 from src.application.Services.AdditionalInfoUserService import AdditionalInfoUserService
 from src.application.Services.UserConfirmationService import UserConfirmationService
 from src.application.Services.UserPermissionService import UserPermissionService
@@ -23,7 +24,7 @@ def user_menagement_controller_injection() -> IUserController:
     send_email_user = SendEmailUser(cache_redis, send_email_brevo)
     additional_info_user_repository = AdditionalInfoUserRepository()
     additional_info_user_service = AdditionalInfoUserService(
-        additional_info_user_repository)
+        additional_info_user_repository, repository)
     user_service = UserManagementService(
         repository, send_email_user, additional_info_user_service)
 
@@ -34,9 +35,10 @@ def user_menagement_controller_injection() -> IUserController:
         repository, user_permission_service, token_generator_email, send_email_user)
 
     userConfirmationService = UserConfirmationService(repository, cache_redis)
+    user_create_validate = UserCreateValidate()
 
     controller = UserController(
-        user_service, user_authentication_service, userConfirmationService)
+        user_service, user_authentication_service, userConfirmationService, user_create_validate)
     return controller
 
 

@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
+
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class IUserPermissionRepository(ABC):
+class IAdditionalInfoUserValidate(ABC):
 
     @abstractmethod
-    def get_all_permission_user(cls, idUser: str) -> ResponseWrapper:
+    def user_update_validate(self, body: any) -> ResponseWrapper:
         pass

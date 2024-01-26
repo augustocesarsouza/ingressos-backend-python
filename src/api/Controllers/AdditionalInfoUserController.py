@@ -1,17 +1,20 @@
 from src.api.ControllersInterface.IAdditionalInfoUserController import IAdditionalInfoUserController
 from src.api.HttpTypes.HttpRequest import HttpRequest
 from src.api.HttpTypes.HttpResponse import HttpResponse
+from src.api.Validators.Interfaces.IAdditionalInfoUserValidate import IAdditionalInfoUserValidate
 from src.application.DTOs.AdditionalInfoUserDTO import AdditionalInfoUserDTO
 from src.application.Services.Interfaces.IAdditionalInfoUserService import IAdditionalInfoUserService
-from src.api.Validators.AdditionalInfoUserValidate import user_update_validate
+# from src.api.Validators.AdditionalInfoUserValidate import user_update_validate
 
 
 class AdditionalInfoUserController(IAdditionalInfoUserController):
-    def __init__(self, additional_info_user_service: IAdditionalInfoUserService) -> None:
+    def __init__(self, additional_info_user_service: IAdditionalInfoUserService, additional_info_user_validate: IAdditionalInfoUserValidate) -> None:
         self.__additional_info_user_service = additional_info_user_service
+        self.__additional_info_user_validate = additional_info_user_validate
 
     def get_info_user(self, http_request: HttpRequest) -> HttpResponse:
         id_guid = http_request.path_params["idGuid"]
+
         reponse = self.__additional_info_user_service.get_info_user(id_guid)
 
         if reponse.IsSuccess:
@@ -26,7 +29,8 @@ class AdditionalInfoUserController(IAdditionalInfoUserController):
             )
 
     def update_async(self, http_request: HttpRequest) -> HttpResponse:
-        result = user_update_validate(http_request.body)
+        result = self.__additional_info_user_validate.user_update_validate(
+            http_request.body)
 
         if not result.IsSuccess:
             return HttpResponse(

@@ -18,21 +18,19 @@ class UserConfirmationService(IUserConfirmationService):
             token_information = jwt.decode(
                 token, key="seilakey123seilakey", algorithms="HS256")
             exp_token = token_information["exp"]
-
             id_user = token_information["id"]
         except jwt.InvalidSignatureError:
             return ResponseWrapper.fail("Token Invalido")
         except jwt.ExpiredSignatureError:
             return ResponseWrapper.fail("Token Expirou")
         except KeyError as e:
-            print("Token Invalido2")
             return ResponseWrapper.fail("Token Invalido2")
 
         time_exp = (exp_token - time.time()) / 60
         if time_exp <= 0:
             return ResponseWrapper.fail("Token Expirou")
 
-        if len(id_user) > 0:
+        if len(id_user) >= 36:
             chave_key = f"TokenString {id_user}"
 
             cache = self.__cache_redis.get_string_async_wrapper(chave_key)
@@ -50,3 +48,5 @@ class UserConfirmationService(IUserConfirmationService):
                 id_user)
 
             return user_result
+        else:
+            return ResponseWrapper.fail("erro id do usuario token")

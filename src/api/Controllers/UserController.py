@@ -1,7 +1,7 @@
 from src.api.ControllersInterface.IUserController import IUserController
 from src.api.HttpTypes.HttpRequest import HttpRequest
 from src.api.HttpTypes.HttpResponse import HttpResponse
-from src.api.Validators.UserCreateValidate import user_create_validate
+from src.api.Validators.Interfaces.IUserCreateValidate import IUserCreateValidate
 from src.application.DTOs.AdditionalInfoUserDTO import AdditionalInfoUserDTO
 from src.application.DTOs.UserDTO import UserDTO
 from src.application.Services.Interfaces.IUserConfirmationService import IUserConfirmationService
@@ -14,14 +14,17 @@ class UserController(IUserController):
     def __init__(self,
                  user_menagement_service: IUserManagementService,
                  user_authentication_service: IUserAuthenticationService,
-                 user_confirmation_service: IUserConfirmationService
+                 user_confirmation_service: IUserConfirmationService,
+                 user_create_validate: IUserCreateValidate
                  ) -> None:
         self.__user_menagement_service = user_menagement_service
         self.__user_authentication_service = user_authentication_service
         self.__user_confirmation_service = user_confirmation_service
+        self.__user_create_validate = user_create_validate
 
     def create_async(self, http_request: HttpRequest) -> HttpResponse:
-        result = user_create_validate(http_request.body)
+        result = self.__user_create_validate.user_create_validate(
+            http_request.body)
 
         if not result.IsSuccess:
             return HttpResponse(
@@ -118,6 +121,7 @@ class UserController(IUserController):
 
     def get_confirm_token(self, http_request: HttpRequest) -> HttpResponse:
         token = http_request.path_params["token"]
+        print(token)
 
         response = self.__user_confirmation_service.get_confirm_token(token)
 

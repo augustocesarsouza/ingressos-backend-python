@@ -3,14 +3,15 @@ from src.domain.Authentication.ITokenGeneratorEmail import ITokenGeneratorEmail
 from src.infradata.Maps.UserMap import UserMap
 from src.infradata.Maps.UserPermissionMap import UserPermissionMap
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.infradata.Config.JwtConfigFile import jwt_config
-import time
 
 
 class TokenGeneratorEmail(ITokenGeneratorEmail):
+
     def generator(cls, user: UserMap, userPermissions: list[UserPermissionMap], password: str) -> ResponseWrapper:
         string_join = ""
+
         for el in userPermissions:
             string_join += el["PermissionName"]
             if len(userPermissions) > 1:
@@ -20,7 +21,7 @@ class TokenGeneratorEmail(ITokenGeneratorEmail):
         TOKEN_KEY = jwt_config["TOKEN_KEY"]
 
         token = jwt.encode({
-            'exp': datetime.utcnow() + timedelta(minutes=EXP_TIME_MIN),
+            'exp': datetime.now(timezone.utc) + timedelta(minutes=EXP_TIME_MIN),
             'Email': user.Email,
             "Password": password,
             "userID": user.Id,

@@ -12,6 +12,9 @@ class UserPermissionService(IUserPermissionService):
             idUser)
 
         if resultPermission.Data == None or len(resultPermission.Data) <= 0:
-            return ResponseWrapper.fail("not fould")
+            return ResponseWrapper.fail("we did not find permission for the user")
+
+        if not resultPermission.IsSuccess:
+            return resultPermission
 
         return resultPermission

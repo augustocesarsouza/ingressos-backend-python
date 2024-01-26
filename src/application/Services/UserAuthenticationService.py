@@ -24,6 +24,9 @@ class UserAuthenticationService(IUserAuthenticationService):
         if resultUser.Data == None:
             return ResponseWrapper.fail("user not exists")
 
+        if not resultUser.IsSuccess:
+            return resultUser
+
         user = resultUser.Data
 
         password_user_send = self.__generar_hash_password(password)
@@ -36,7 +39,7 @@ class UserAuthenticationService(IUserAuthenticationService):
             user.Id)
 
         if not response_permissions.IsSuccess:
-            return ResponseWrapper.fail("user does not have permission")
+            return response_permissions
 
         token_response = self.__token_generator_email.generator(
             user, response_permissions.Data, password)
@@ -45,12 +48,13 @@ class UserAuthenticationService(IUserAuthenticationService):
             return token_response
 
         userDTO = UserDTO(user.Id, user.Name, user.Email,
-                          None, None, None, token_response.Data).to_dict()
+                          None, None, None, token_response.Data, None).to_dict()
 
         randomCode = self.__gerar_numero_aleatorio()
         code_random_dictionary_instance.add(userDTO['id'], randomCode)
 
-        self.__send_email_user.send_code_random(userDTO, randomCode)
+        # descomentar se quiser mandar para o email
+        # self.__send_email_user.send_code_random(userDTO, randomCode)
 
         return ResponseWrapper.ok(userDTO)
 

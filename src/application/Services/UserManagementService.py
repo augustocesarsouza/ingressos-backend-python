@@ -25,7 +25,7 @@ class UserManagementService(IUserManagementService):
         if not user_DTO.Email.__contains__("@gmail.com") and not user_DTO.Email.__contains__("@hotmal.com"):
             return ResponseWrapper.fail("email need @gmail.com or @hotmal.com")
 
-        if userAlreadyCreate.Data != None:
+        if userAlreadyCreate.IsSuccess == True and userAlreadyCreate.Data != None:
             return ResponseWrapper.fail("email or cpf already exist")
 
         new_guid = uuid.uuid4()

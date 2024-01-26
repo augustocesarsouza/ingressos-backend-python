@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class IUserPermissionRepository(ABC):
+class IUserCreateValidate(ABC):
 
     @abstractmethod
-    def get_all_permission_user(cls, idUser: str) -> ResponseWrapper:
+    def user_create_validate(cls, body: any) -> ResponseWrapper:
         pass
