@@ -11,5 +11,5 @@ class PermissionMap(Base):
 
     def to_dict(self):
         return {
-            key: value for key, value in vars(self).items() if value is not None
+            key[0].lower() + key[1:]: value for key, value in vars(self).items() if value is not None
         }

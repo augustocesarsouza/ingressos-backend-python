@@ -6,7 +6,6 @@ from cloudinary.utils import cloudinary_url
 import cloudinary
 from cloudinary import exceptions
 from src.infradata.Config.JwtConfigFile import jwt_config
-import base64
 
 
 class ClodinaryUti(IClodinaryUti):
@@ -20,8 +19,6 @@ class ClodinaryUti(IClodinaryUti):
                 api_secret=jwt_config["API-SECRET"],
                 secure=True
             )
-
-            print(type(base_64))
 
             upload_result = upload(
                 str(base_64),
@@ -40,8 +37,6 @@ class ClodinaryUti(IClodinaryUti):
 
             cloudinary_create = CloudinaryCreate(
                 public_id, image_url)
-
-            # print(cloudinary_create)
 
             return ResponseWrapper.ok(cloudinary_create)
         except exceptions.Error as e:

@@ -123,8 +123,25 @@ class MovieRepository(IMovieRepository):
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
     @classmethod
-    def delete(cls, id_movie: str) -> ResponseWrapper:  # aqui nao sei como delete
-        pass
+    def delete(cls, id_movie: str) -> ResponseWrapper:
+        with ApplicationDbContext() as database:
+            try:
+                database.session.begin()
+
+                movie = database.session.query(
+                    MovieMap).filter_by(Id=id_movie).first()
+
+                database.session.delete(movie)
+                database.session.commit()
+
+                movie_delete_DTO = MovieDTO(movie.Id, movie.Title, None, None, None, None,
+                                            None, movie.PublicId, None, movie.PublicIdImgBackgound, None, None).to_dict()
+
+                return ResponseWrapper.ok(movie_delete_DTO)
+            except SQLAlchemyError as exception:
+                database.session.rollback()
+                exception_name = type(exception).__name__
+                return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
     @classmethod
     # olhar AdditionalInfoUserRepository, como foi feito

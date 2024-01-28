@@ -51,10 +51,9 @@ class AdditionalInfoUserService(IAdditionalInfoUserService):
             return ResponseWrapper.fail("error ao encontrar user")
 
         user = user_validate_hash.Data
-        print(user)
 
         password_user_send = self.__generar_hash_password(password)
-        password_database_hash = user['passwordhash']
+        password_database_hash = user['passwordHash']
 
         if password_user_send != password_database_hash:
             return ResponseWrapper.fail("Password Invalid")

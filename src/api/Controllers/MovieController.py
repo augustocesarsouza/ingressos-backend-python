@@ -55,7 +55,20 @@ class MovieController(IMovieController):
             )
 
     def delete_movie(self, http_request: HttpRequest) -> HttpResponse:
-        pass
+        id_movie = http_request.path_params["idMovie"]
+
+        delete_movie_result = self.__movie_service.delete_movie(id_movie)
+
+        if delete_movie_result.IsSuccess:
+            return HttpResponse(
+                status_code=200,
+                body={"data": delete_movie_result.Data}
+            )
+        else:
+            return HttpResponse(
+                status_code=400,
+                body={"data": delete_movie_result.Data}
+            )
 
     def update_movie(self, http_request: HttpRequest) -> HttpResponse:
         pass

@@ -1,8 +1,8 @@
-class PermissionDTO:
-    def __init__(self, id, visualName, permissionName) -> None:
+class MovieTheaterDTO:
+    def __init__(self, id: str, movieId: str, regionId: str) -> None:
         self.Id = id
-        self.VisualName = visualName
-        self.PermissionName = permissionName
+        self.MovieId = movieId
+        self.RegionId = regionId
 
     def to_dict(self):
         return {

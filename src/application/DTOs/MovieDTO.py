@@ -15,7 +15,7 @@ class MovieDTO:
 
     def to_dict(self):
         return {
-            key.lower(): value for key, value in vars(self).items() if value is not None
+            key[0].lower() + key[1:]: value for key, value in vars(self).items() if value is not None
         }
 
     def add_imgUrl_PublicId_ImgUrlBackground_PublicIdImgBackgound(self, img_url: str, public_id: str, img_url_background: str, public_id_img_backgound: str,):

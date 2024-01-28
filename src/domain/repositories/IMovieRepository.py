@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from src.application.DTOs.MovieDTO import MovieDTO
-
 from src.application.Services.ResponseWrapper import ResponseWrapper
+
 from src.infradata.Maps.MovieMap import MovieMap
 
 

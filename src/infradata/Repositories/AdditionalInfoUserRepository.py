@@ -46,7 +46,7 @@ class AdditionalInfoUserRepository(IAdditionalInfoUserRepository):
         with ApplicationDbContext() as database:
 
             additionalInfoUserDTO = AdditionalInfoUserDTO(None, None, infoUser.BirthDate, None, infoUser.Gender, infoUser.Phone, infoUser.Cep, infoUser.Logradouro,
-                                                          infoUser.Numero, infoUser.Complemento, infoUser.Referencia, infoUser.Bairro, infoUser.Estado, infoUser.Cidade,).to_dict()
+                                                          infoUser.Numero, infoUser.Complemento, infoUser.Referencia, infoUser.Bairro, infoUser.Estado, infoUser.Cidade).to_dict()
 
             try:
                 database.session.begin()

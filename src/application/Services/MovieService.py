@@ -2,17 +2,22 @@ import uuid
 from src.application.DTOs.MovieDTO import MovieDTO
 from src.application.DTOs.RegionDTO import RegionDTO
 from src.application.Services.Interfaces.IMovieService import IMovieService
+from src.application.Services.Interfaces.IMovieTheaterService import IMovieTheaterService
 from src.application.Services.Interfaces.IRegionService import IRegionService
 from src.application.Services.ResponseWrapper import ResponseWrapper
 from src.domain.repositories.IMovieRepository import IMovieRepository
 from src.infradata.CloudinaryConfig.CloudinaryCreate import CloudinaryCreate
 from src.infradata.Maps.MovieMap import MovieMap
 from src.infradata.UtilityExternal.Interface.IClodinaryUti import IClodinaryUti
+import cloudinary
+from cloudinary import api
+from src.infradata.Config.JwtConfigFile import jwt_config
 
 
 class MovieService(IMovieService):
-    def __init__(self, movie_repository: IMovieRepository, region_service: IRegionService, clodinary_uti: IClodinaryUti) -> None:
+    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, clodinary_uti: IClodinaryUti) -> None:
         self.__movie_repository = movie_repository
+        self.__movie_theater_service = movie_theater_service
         self.__region_service = region_service
         self.__clodinary_uti = clodinary_uti
 
@@ -85,8 +90,6 @@ class MovieService(IMovieService):
                              MovieRating=movie_DTO.MovieRating, ImgUrl=movie_DTO.ImgUrl, PublicId=movie_DTO.PublicId, ImgUrlBackground=movie_DTO.ImgUrlBackground,
                              PublicIdImgBackgound=movie_DTO.PublicIdImgBackgound, StatusMovie=movie_DTO.StatusMovie)
 
-        print(movie_map.to_dict())
-
         result_create = self.__movie_repository.create(movie_map)
 
         if not result_create.IsSuccess:
@@ -95,7 +98,42 @@ class MovieService(IMovieService):
         return result_create
 
     def delete_movie(self, id_movie: str) -> ResponseWrapper:
-        pass
+        movie_get_result = self.__movie_repository.get_by_id(
+            id_movie)
+
+        delete_movie_theater_result = self.__movie_theater_service.delete(
+            id_movie)
+
+        if not delete_movie_theater_result.IsSuccess:
+            return delete_movie_theater_result
+
+        if movie_get_result.Data == None:
+            return ResponseWrapper.fail("not fould movie")
+
+        if not movie_get_result.IsSuccess:
+            return movie_get_result
+
+        movie_delete_result = self.__movie_repository.delete(id_movie)
+
+        if not movie_delete_result.IsSuccess:
+            return movie_delete_result
+
+        movie_dto_delete: MovieDTO = movie_delete_result.Data
+
+        cloudinary.config(
+            cloud_name=jwt_config["CLOUD-NAME"],
+            api_key=jwt_config["API-KEY"],
+            api_secret=jwt_config["API-SECRET"],
+            secure=True
+        )
+
+        if len(str(movie_dto_delete["publicId"])) > 0:
+            api.delete_resources(movie_dto_delete["publicId"])
+
+        if len(str(movie_dto_delete["publicIdImgBackgound"])) > 0:
+            api.delete_resources(movie_dto_delete["publicIdImgBackgound"])
+
+        return movie_delete_result
 
     def update_movie(self, movie_DTO: MovieDTO) -> ResponseWrapper:
         pass
