@@ -8,4 +8,7 @@ jwt_config = {
     "REFRESH_TIME_MIN": int(os.getenv("REFRESH_TIME_MIN")),
     "JWT_KEY": os.getenv("JWT_KEY"),
     "API-KEY-BREVO": os.getenv("API-KEY-BREVO"),
+    "CLOUD-NAME": os.getenv("CLOUD-NAME"),
+    "API-KEY": os.getenv("API-KEY"),
+    "API-SECRET": os.getenv("API-SECRET"),
 }
