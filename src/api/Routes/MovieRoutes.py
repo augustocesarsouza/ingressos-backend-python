@@ -70,14 +70,3 @@ def update():
         request, movie_controller.movie_controller_injection().update_movie)
 
     return jsonify(http_response.body), http_response.status_code
-
-
-@token_verify
-@movie_routes_bp.route('/v1/movie/update-imgbackground', methods=["PUT"])
-def update_img_background():
-    movie_controller = MovieControllerInjection
-
-    http_response = request_adapter(
-        request, movie_controller.movie_controller_injection().update_movie_img_background)
-
-    return jsonify(http_response.body), http_response.status_code

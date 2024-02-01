@@ -1,14 +1,13 @@
 from abc import ABC, abstractmethod
-
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class IRegionService(ABC):
+class IRegionTheatreRepository(ABC):
 
     @abstractmethod
-    def get_city_id(self, city: str) -> ResponseWrapper:
+    def get_by_theatre_id(cls, theatre_id: str) -> ResponseWrapper:
         pass
 
     @abstractmethod
-    def get_id_by_name_state(self, state: str) -> ResponseWrapper:
+    def delete(cls, region_theatre_id: str) -> ResponseWrapper:
         pass

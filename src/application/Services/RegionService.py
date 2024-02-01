@@ -7,11 +7,11 @@ class RegionService(IRegionService):
     def __init__(self, region_repository: IRegionRepository) -> None:
         self.__region_repository = region_repository
 
-    def get_region_id(self, state: str) -> ResponseWrapper:
-        region_obj = self.__region_repository.get_region_id(state)
+    def get_city_id(self, city: str) -> ResponseWrapper:
+        region_obj = self.__region_repository.get_city_id(city)
 
         if region_obj.Data == None:
-            return ResponseWrapper.fail("não encontrado region")
+            return ResponseWrapper.fail("not found region")
 
         if not region_obj.IsSuccess:
             # erro no banco
@@ -19,11 +19,11 @@ class RegionService(IRegionService):
 
         return region_obj
 
-    def get_id_by_name_city(self, state: str) -> ResponseWrapper:
-        region_obj = self.__region_repository.get_id_by_name_city(state)
+    def get_id_by_name_state(self, state: str) -> ResponseWrapper:
+        region_obj = self.__region_repository.get_id_by_name_state(state)
 
         if region_obj.Data == None:
-            return ResponseWrapper.fail("não encontrado region")
+            return ResponseWrapper.fail("not found region")
 
         if not region_obj.IsSuccess:
             # erro no banco

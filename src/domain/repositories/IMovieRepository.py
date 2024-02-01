@@ -12,6 +12,10 @@ class IMovieRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_id_only_publicId_PublicIdImgBackgound(cls, id_movie: str) -> ResponseWrapper:
+        pass
+
+    @abstractmethod
     def get_info_movies_by_id(cls, id_movie: str) -> ResponseWrapper:
         pass
 

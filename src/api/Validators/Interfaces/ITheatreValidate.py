@@ -1,14 +1,13 @@
 from abc import ABC, abstractmethod
-
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class IRegionService(ABC):
+class ITheatreValidate(ABC):
 
     @abstractmethod
-    def get_city_id(self, city: str) -> ResponseWrapper:
+    def theatre_create_validate(cls, body: any) -> ResponseWrapper:
         pass
 
     @abstractmethod
-    def get_id_by_name_state(self, state: str) -> ResponseWrapper:
+    def theatre_update_img_validate(cls, body: any) -> ResponseWrapper:
         pass

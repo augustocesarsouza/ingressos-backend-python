@@ -8,21 +8,18 @@ from src.application.Services.ResponseWrapper import ResponseWrapper
 from src.domain.repositories.IMovieRepository import IMovieRepository
 from src.infradata.CloudinaryConfig.CloudinaryCreate import CloudinaryCreate
 from src.infradata.Maps.MovieMap import MovieMap
-from src.infradata.UtilityExternal.Interface.IClodinaryUti import IClodinaryUti
-import cloudinary
-from cloudinary import api
-from src.infradata.Config.JwtConfigFile import jwt_config
+from src.infradata.UtilityExternal.Interface.ICloudinaryUti import ICloudinaryUti
 
 
 class MovieService(IMovieService):
-    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, clodinary_uti: IClodinaryUti) -> None:
+    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, cloudinary_util: ICloudinaryUti) -> None:
         self.__movie_repository = movie_repository
         self.__movie_theater_service = movie_theater_service
         self.__region_service = region_service
-        self.__clodinary_uti = clodinary_uti
+        self.__cloudinary_util = cloudinary_util
 
-    def get_all_movie_by_region_id(self, region: str) -> ResponseWrapper:
-        id_region_result = self.__region_service.get_id_by_name_city(region)
+    def get_all_movie_by_region_id(self, state: str) -> ResponseWrapper:
+        id_region_result = self.__region_service.get_id_by_name_state(state)
 
         if not id_region_result.IsSuccess:
             return id_region_result
@@ -32,10 +29,13 @@ class MovieService(IMovieService):
         movie_all_result = self.__movie_repository.get_all_movie_by_region_id(
             region_obj.Id)
 
+        if not movie_all_result.IsSuccess:
+            return movie_all_result
+
         if movie_all_result.Data == None or len(movie_all_result.Data) <= 0:
             return ResponseWrapper.fail("we did not find movies")
 
-        movie_all: list[MovieDTO] = movie_all_result.Data
+        movie_all = movie_all_result.Data
 
         return ResponseWrapper.ok(movie_all)
 
@@ -68,13 +68,13 @@ class MovieService(IMovieService):
         new_guid = uuid.uuid4()
         guid_str = str(new_guid)
 
-        result_create_cloudinary = self.__clodinary_uti.create_img(
+        result_create_cloudinary = self.__cloudinary_util.create_img(
             movie_DTO.Base64Img, 625, 919)
 
         if not result_create_cloudinary.IsSuccess:
             return result_create_cloudinary
 
-        result_img_background = self.__clodinary_uti.create_img(
+        result_img_background = self.__cloudinary_util.create_img(
             movie_DTO.Base64Img, 1440, 500)
 
         if not result_img_background.IsSuccess:
@@ -101,17 +101,17 @@ class MovieService(IMovieService):
         movie_get_result = self.__movie_repository.get_by_id(
             id_movie)
 
-        delete_movie_theater_result = self.__movie_theater_service.delete(
-            id_movie)
-
-        if not delete_movie_theater_result.IsSuccess:
-            return delete_movie_theater_result
-
         if movie_get_result.Data == None:
             return ResponseWrapper.fail("not fould movie")
 
         if not movie_get_result.IsSuccess:
             return movie_get_result
+
+        delete_movie_theater_result = self.__movie_theater_service.delete(
+            id_movie)
+
+        if not delete_movie_theater_result.IsSuccess:
+            return delete_movie_theater_result
 
         movie_delete_result = self.__movie_repository.delete(id_movie)
 
@@ -120,23 +120,65 @@ class MovieService(IMovieService):
 
         movie_dto_delete: MovieDTO = movie_delete_result.Data
 
-        cloudinary.config(
-            cloud_name=jwt_config["CLOUD-NAME"],
-            api_key=jwt_config["API-KEY"],
-            api_secret=jwt_config["API-SECRET"],
-            secure=True
-        )
+        # mesmo que der algum erro ao deletar no cloudinary ele já deletou no banco de dados o mivie
+        result_delete_img_main = self.__cloudinary_util.delete_img(
+            movie_dto_delete["publicId"])
 
-        if len(str(movie_dto_delete["publicId"])) > 0:
-            api.delete_resources(movie_dto_delete["publicId"])
+        if not result_delete_img_main.IsSuccess:
+            return result_delete_img_main
 
-        if len(str(movie_dto_delete["publicIdImgBackgound"])) > 0:
-            api.delete_resources(movie_dto_delete["publicIdImgBackgound"])
+        result_delete_img_background = self.__cloudinary_util.delete_img(
+            movie_dto_delete["publicIdImgBackgound"])
+
+        if not result_delete_img_background.IsSuccess:
+            return result_delete_img_background
 
         return movie_delete_result
 
     def update_movie(self, movie_DTO: MovieDTO) -> ResponseWrapper:
-        pass
+        movie_update = self.__movie_repository.get_by_id_only_publicId_PublicIdImgBackgound(
+            movie_DTO.Id)
 
-    def update_movie_img_background(self, movie_DTO: MovieDTO) -> ResponseWrapper:
-        pass
+        if not movie_update.IsSuccess:
+            return movie_update
+
+        if movie_update.Data == None:
+            return ResponseWrapper.fail("not fould movie")
+
+        movie_update_obj: MovieDTO = movie_update.Data
+        result_delete_img_main = self.__cloudinary_util.delete_img(
+            movie_update_obj.PublicId)
+
+        if not result_delete_img_main.IsSuccess:
+            return result_delete_img_main
+
+        result_delete_img_background = self.__cloudinary_util.delete_img(
+            movie_update_obj.PublicIdImgBackgound)
+
+        if not result_delete_img_background.IsSuccess:
+            return result_delete_img_background
+
+        result_create_cloudinary = self.__cloudinary_util.create_img(
+            movie_DTO.Base64Img, 625, 919)
+
+        if not result_create_cloudinary.IsSuccess:
+            return result_create_cloudinary
+
+        result_img_background = self.__cloudinary_util.create_img(
+            movie_DTO.Base64Img, 1440, 500)
+
+        if not result_img_background.IsSuccess:
+            return result_img_background
+
+        create_img_base64: CloudinaryCreate = result_create_cloudinary.Data
+        create_img_background: CloudinaryCreate = result_img_background.Data
+
+        movie_DTO.add_imgUrl_PublicId_ImgUrlBackground_PublicIdImgBackgound(
+            create_img_base64.img_url, create_img_base64.public_id, create_img_background.img_url, create_img_background.public_id)
+
+        result_update_movie = self.__movie_repository.update_movie(movie_DTO)
+
+        if not result_update_movie.IsSuccess:
+            return result_update_movie
+
+        return result_update_movie

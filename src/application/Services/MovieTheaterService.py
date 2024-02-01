@@ -19,7 +19,7 @@ class MovieTheaterService(IMovieTheaterService):
             return movie_theater
 
         if movie_theater.Data == None or len(movie_theater.Data) <= 0:
-            return ResponseWrapper.fail("NOT FOULD result")
+            return ResponseWrapper.ok("NOT FOULD result")
 
         movie_theater_all: list[MovieTheaterDTO] = movie_theater.Data
 

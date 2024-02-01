@@ -5,7 +5,7 @@ from sqlalchemy import Column, CHAR, INTEGER, NVARCHAR, ForeignKey
 class MovieTheaterMap(Base):
     __tablename__ = "MovieTheater"
 
-    Id = Column(INTEGER, primary_key=True, autoincrement=True)
+    Id = Column(CHAR(36), primary_key=True, autoincrement=True)
     MovieId = Column(CHAR(36), ForeignKey('Movie.Id'), nullable=False)
     RegionId = Column(CHAR(36), ForeignKey('Region.Id'), nullable=False)
 

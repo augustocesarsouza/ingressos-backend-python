@@ -28,7 +28,3 @@ class IMovieController(ABC):
     @abstractmethod
     def update_movie(self, http_request: HttpRequest) -> HttpResponse:
         pass
-
-    @abstractmethod
-    def update_movie_img_background(self, http_request: HttpRequest) -> HttpResponse:
-        pass
