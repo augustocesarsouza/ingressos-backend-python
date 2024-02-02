@@ -18,6 +18,18 @@ class MovieService(IMovieService):
         self.__region_service = region_service
         self.__cloudinary_util = cloudinary_util
 
+    def get_movie_by_id_check_exist(self, movie_id: str) -> ResponseWrapper:
+        movie_result = self.__movie_repository.get_movie_by_id_check_exist(
+            movie_id)
+
+        if movie_result.Data == None:
+            return ResponseWrapper.fail("not fould movie")
+
+        if not movie_result.IsSuccess:
+            return movie_result
+
+        return movie_result
+
     def get_all_movie_by_region_id(self, state: str) -> ResponseWrapper:
         id_region_result = self.__region_service.get_id_by_name_state(state)
 

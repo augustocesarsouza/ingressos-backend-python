@@ -8,6 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 class AdditionalInfoUserRepository(IAdditionalInfoUserRepository):
 
+    @classmethod
     def get_info_user(self, id_guid: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -25,6 +26,7 @@ class AdditionalInfoUserRepository(IAdditionalInfoUserRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def get_by_id_guid_user(self, id_guid: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -42,6 +44,7 @@ class AdditionalInfoUserRepository(IAdditionalInfoUserRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def create_info(self, infoUser: AdditionalInfoUserMap) -> ResponseWrapper:
         with ApplicationDbContext() as database:
 
@@ -58,6 +61,7 @@ class AdditionalInfoUserRepository(IAdditionalInfoUserRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def update_async(self, infoUser: AdditionalInfoUserDTO) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:

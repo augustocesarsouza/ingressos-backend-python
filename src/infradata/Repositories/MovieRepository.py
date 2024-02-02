@@ -29,6 +29,31 @@ class MovieRepository(IMovieRepository):
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
     @classmethod
+    def get_movie_by_id_check_exist(self, movie_id: str) -> ResponseWrapper:
+        with ApplicationDbContext() as database:
+            try:
+                database.session.begin()
+                movie = (
+                    database.session
+                    .query(MovieMap.Id)
+                    .filter(MovieMap.Id == movie_id)
+                    .first()
+                )
+
+                database.session.commit()
+
+                if movie != None:
+                    movie_dto = MovieDTO(id=movie.Id, title=None, description=None, gender=None, duration=None, movieRating=None, imgUrl=None, publicId=None,
+                                         imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img=None).to_dict()
+                    return ResponseWrapper.ok(movie_dto)
+                else:
+                    return ResponseWrapper.ok(movie)
+            except SQLAlchemyError as exception:
+                database.session.rollback()
+                exception_name = type(exception).__name__
+                return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
+
+    @classmethod
     def get_by_id_only_publicId_PublicIdImgBackgound(cls, id_movie: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:

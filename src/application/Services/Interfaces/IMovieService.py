@@ -6,6 +6,10 @@ from src.application.DTOs.MovieDTO import MovieDTO
 class IMovieService(ABC):
 
     @abstractmethod
+    def get_movie_by_id_check_exist(self, movie_id: str) -> ResponseWrapper:
+        pass
+
+    @abstractmethod
     def get_all_movie_by_region_id(self, state: str) -> ResponseWrapper:
         pass
 

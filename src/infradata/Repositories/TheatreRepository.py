@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 class TheatreRepository(ITheatreRepository):
 
+    @classmethod
     def get_by_id(cls, theatre_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -48,9 +49,11 @@ class TheatreRepository(ITheatreRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def get_by_id_all_props(cls, theatre_id: str) -> ResponseWrapper:
         pass
 
+    @classmethod
     def get_all_theatre_by_region_id(cls, region_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -87,6 +90,7 @@ class TheatreRepository(ITheatreRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def create(cls, theatre: TheatreMap) -> ResponseWrapper:
         with ApplicationDbContext() as database:
 
@@ -103,7 +107,7 @@ class TheatreRepository(ITheatreRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
-      # MovieRepository olha lá tem
+    @classmethod
     def delete(cls, id_theatre: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -124,6 +128,7 @@ class TheatreRepository(ITheatreRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def update(cls, theatre_DTO: TheatreDTO) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:

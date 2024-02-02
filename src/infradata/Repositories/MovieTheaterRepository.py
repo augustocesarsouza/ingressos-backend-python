@@ -9,6 +9,7 @@ from src.infradata.Maps.MovieTheaterMap import MovieTheaterMap
 
 class MovieTheaterRepository(IMovieTheaterRepository):
 
+    @classmethod
     def get_by_id(cls, movie_theater_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -26,6 +27,7 @@ class MovieTheaterRepository(IMovieTheaterRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def get_by_movie_id(cls, id_movie: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -54,6 +56,7 @@ class MovieTheaterRepository(IMovieTheaterRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def delete(cls, movie_theater_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:

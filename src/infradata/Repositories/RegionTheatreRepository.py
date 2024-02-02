@@ -8,6 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 class RegionTheatreRepository(IRegionTheatreRepository):
 
+    @classmethod
     def get_by_theatre_id(cls, theatre_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -33,6 +34,7 @@ class RegionTheatreRepository(IRegionTheatreRepository):
                 exception_name = type(exception).__name__
                 return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
 
+    @classmethod
     def delete(cls, region_theatre_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -45,7 +47,7 @@ class RegionTheatreRepository(IRegionTheatreRepository):
                 database.session.commit()
 
                 theatre_DTO = RegionTheatreDTO(
-                        id=theatre.Id, theatreId=theatre.TheatreId, regionId=theatre.RegionId).to_dict()
+                    id=theatre.Id, theatreId=theatre.TheatreId, regionId=theatre.RegionId).to_dict()
 
                 return ResponseWrapper.ok(theatre_DTO)
             except SQLAlchemyError as exception:
