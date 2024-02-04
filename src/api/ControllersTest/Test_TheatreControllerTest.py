@@ -8,7 +8,7 @@ from src.application.Services.ResponseWrapper import ResponseWrapper
 from src.api.Controllers.TheatreController import TheatreController
 
 
-class TheatreControllerTest(unittest.TestCase):
+class Test_TheatreControllerTest(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_theatre_service = Mock(spec=ITheatreService)
         self.mock_theatre_validate = Mock(spec=ITheatreValidate)

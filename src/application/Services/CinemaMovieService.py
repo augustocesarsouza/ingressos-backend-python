@@ -25,10 +25,10 @@ class CinemaMovieService(ICinemaMovieService):
 
         region = result_get_region.Data
 
-        result_get_region = self.__cinema_movie_repository.get_by_region_cinema_id_and_movie_id(
+        result_get_by_region_cinema_id = self.__cinema_movie_repository.get_by_region_cinema_id_and_movie_id(
             region["id"], movie_id)
 
-        return result_get_region
+        return result_get_by_region_cinema_id
 
     def create(self, cinema_movie_dto: CinemaMovieDTO) -> ResponseWrapper:
         if cinema_movie_dto == None:
@@ -38,19 +38,19 @@ class CinemaMovieService(ICinemaMovieService):
             cinema_movie_dto.CinemaId)
 
         if not result_get_cinema_check_exist.IsSuccess:
-            return ResponseWrapper.fail("not exsit cinema")
+            return ResponseWrapper.fail("not exist cinema")
 
         result_get_region_check_exist = self.__region_service.get_region_by_id_check_exist(
             cinema_movie_dto.RegionId)
 
         if not result_get_region_check_exist.IsSuccess:
-            return ResponseWrapper.fail("not exsit region")
+            return ResponseWrapper.fail("not exist region")
 
         result_get_movie_check_exist = self.__movie_service.get_movie_by_id_check_exist(
             cinema_movie_dto.MovieId)
 
         if not result_get_movie_check_exist.IsSuccess:
-            return ResponseWrapper.fail("not exsit movie")
+            return ResponseWrapper.fail("not exist movie")
 
         new_guid = uuid.uuid4()
         guid_str = str(new_guid)

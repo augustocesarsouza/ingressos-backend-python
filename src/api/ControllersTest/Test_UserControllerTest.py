@@ -10,7 +10,7 @@ from src.application.Services.Interfaces.IUserManagementService import IUserMana
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class UserControllerTest(unittest.TestCase):
+class Test_UserControllerTest(unittest.TestCase):
 
     def test_create_async_without_error(self):
         mock_user_menagement_service = Mock(spec=IUserManagementService)

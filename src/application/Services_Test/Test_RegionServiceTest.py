@@ -6,7 +6,7 @@ from src.application.Services.ResponseWrapper import ResponseWrapper
 from src.domain.repositories.IRegionRepository import IRegionRepository
 
 
-class RegionServiceTest(unittest.TestCase):
+class Test_RegionServiceTest(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_region_repository = Mock(spec=IRegionRepository)
 

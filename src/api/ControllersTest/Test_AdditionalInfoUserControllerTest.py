@@ -9,7 +9,7 @@ from src.application.Services.Interfaces.IAdditionalInfoUserService import IAddi
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class AdditionalInfoUserControllerTest(unittest.TestCase):
+class Test_AdditionalInfoUserControllerTest(unittest.TestCase):
 
     def test_get_info_user_without_error_status_code_200(self):
         mock_additional_info_user_service = Mock(

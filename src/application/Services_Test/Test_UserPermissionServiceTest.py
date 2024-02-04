@@ -6,7 +6,7 @@ from src.application.Services.UserPermissionService import UserPermissionService
 from src.domain.repositories.IUserPermissionRepository import IUserPermissionRepository
 
 
-class UserPermissionServiceTest(unittest.TestCase):
+class Test_UserPermissionServiceTest(unittest.TestCase):
 
     def test_get_all_permission_user_without_error(self):
         mock_user_permission_repository = Mock(spec=IUserPermissionRepository)

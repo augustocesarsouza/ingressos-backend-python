@@ -125,6 +125,8 @@ class MovieService(IMovieService):
         if not delete_movie_theater_result.IsSuccess:
             return delete_movie_theater_result
 
+        # criar aqui para deletar do 'MovieRegionTicketsPurchesed' tem que deletar a junção lá tbm
+
         movie_delete_result = self.__movie_repository.delete(id_movie)
 
         if not movie_delete_result.IsSuccess:

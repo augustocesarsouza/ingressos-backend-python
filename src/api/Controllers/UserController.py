@@ -121,7 +121,6 @@ class UserController(IUserController):
 
     def get_confirm_token(self, http_request: HttpRequest) -> HttpResponse:
         token = http_request.path_params["token"]
-        print(token)
 
         response = self.__user_confirmation_service.get_confirm_token(token)
 

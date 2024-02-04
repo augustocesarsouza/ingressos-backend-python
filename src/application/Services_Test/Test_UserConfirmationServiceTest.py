@@ -9,7 +9,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 
 
-class UserConfirmationServiceTest(unittest.TestCase):
+class Test_UserConfirmationServiceTest(unittest.TestCase):
 
     def test_get_confirm_token_without_error(self):
         mock_user_repository = Mock(spec=IUserRepository)
@@ -138,5 +138,5 @@ class UserConfirmationServiceTest(unittest.TestCase):
             token)
 
         self.assertEqual(response.IsSuccess, True)
-        self.assertEqual(response.Data["tokenalreadyvisualized"], True)
-        self.assertEqual(response.Data["erromessage"], "já Visualizado")
+        self.assertEqual(response.Data["tokenAlreadyVisualized"], True)
+        self.assertEqual(response.Data["erroMessage"], "já Visualizado")

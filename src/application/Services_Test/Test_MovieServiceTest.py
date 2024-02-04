@@ -12,7 +12,7 @@ from src.infradata.UtilityExternal.Interface.ICloudinaryUti import ICloudinaryUt
 from src.application.Services.Interfaces.IMovieTheaterService import IMovieTheaterService
 
 
-class MovieServiceTest(unittest.TestCase):
+class Test_MovieServiceTest(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_movie_repository = Mock(spec=IMovieRepository)
         self.mock_movie_theater_service = Mock(spec=IMovieTheaterService)
