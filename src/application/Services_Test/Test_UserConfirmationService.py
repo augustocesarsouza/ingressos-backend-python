@@ -9,7 +9,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 
 
-class Test_UserConfirmationServiceTest(unittest.TestCase):
+class Test_UserConfirmationService(unittest.TestCase):
 
     def test_get_confirm_token_without_error(self):
         mock_user_repository = Mock(spec=IUserRepository)

@@ -3,13 +3,12 @@ from unittest.mock import Mock
 
 from src.api.Controllers.AdditionalInfoUserController import AdditionalInfoUserController
 from src.api.HttpTypes.HttpRequest import HttpRequest
-from src.api.Validators.AdditionalInfoUserValidate import AdditionalInfoUserValidate
 from src.api.Validators.Interfaces.IAdditionalInfoUserValidate import IAdditionalInfoUserValidate
 from src.application.Services.Interfaces.IAdditionalInfoUserService import IAdditionalInfoUserService
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class Test_AdditionalInfoUserControllerTest(unittest.TestCase):
+class Test_AdditionalInfoUserController(unittest.TestCase):
 
     def test_get_info_user_without_error_status_code_200(self):
         mock_additional_info_user_service = Mock(

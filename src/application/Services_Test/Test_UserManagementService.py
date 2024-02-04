@@ -10,7 +10,7 @@ from src.domain.repositories.IUserRepository import IUserRepository
 from src.infradata.SendEmailUser.Interface.ISendEmailUser import ISendEmailUser
 
 
-class Test_UserManagementServiceTest(unittest.TestCase):
+class Test_UserManagementService(unittest.TestCase):
 
     def test_create_async_user_without_error(self):
         user_repository = Mock(spec=IUserRepository)

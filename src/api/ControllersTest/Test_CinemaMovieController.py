@@ -8,7 +8,7 @@ from src.application.Services.Interfaces.ICinemaMovieService import ICinemaMovie
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class Test_CinemaMovieControllerTest(unittest.TestCase):
+class Test_CinemaMovieController(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_cinema_movie_service = Mock(ICinemaMovieService)
         self.mock_cinema_movie_validate = Mock(ICinemaMovieValidate)

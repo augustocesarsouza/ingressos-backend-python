@@ -10,7 +10,7 @@ from src.application.Services.Interfaces.IRegionService import IRegionService
 from src.domain.repositories.ICinemaMovieRepository import ICinemaMovieRepository
 
 
-class Test_CinemaMovieServiceTest(unittest.TestCase):
+class Test_CinemaMovieService(unittest.TestCase):
 
     def setUp(self) -> None:
         self.mock_cinema_movie_repository = Mock(ICinemaMovieRepository)

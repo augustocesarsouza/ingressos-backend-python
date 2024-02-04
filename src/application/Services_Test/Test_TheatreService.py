@@ -12,7 +12,7 @@ from src.infradata.CloudinaryConfig.CloudinaryCreate import CloudinaryCreate
 from src.infradata.UtilityExternal.Interface.ICloudinaryUti import ICloudinaryUti
 
 
-class Test_TheatreServiceTest(unittest.TestCase):
+class Test_TheatreService(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_theatre_repository = Mock(spec=ITheatreRepository)
         self.mock_region_service = Mock(spec=IRegionService)

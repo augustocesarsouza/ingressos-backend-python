@@ -7,7 +7,7 @@ from src.application.Services.Interfaces.IRegionService import IRegionService
 from src.application.Services.ResponseWrapper import ResponseWrapper
 
 
-class Test_RegionControllerTest(unittest.TestCase):
+class Test_RegionController(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_region_service = Mock(spec=IRegionService)
 

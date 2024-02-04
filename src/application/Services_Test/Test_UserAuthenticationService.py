@@ -13,7 +13,7 @@ import hashlib
 from src.infradata.SendEmailUser.Interface.ISendEmailUser import ISendEmailUser
 
 
-class Test_UserAuthenticationServiceTest(unittest.TestCase):
+class Test_UserAuthenticationService(unittest.TestCase):
 
     def test_login_without_error(self):
         mock_user_repository = Mock(spec=IUserRepository)

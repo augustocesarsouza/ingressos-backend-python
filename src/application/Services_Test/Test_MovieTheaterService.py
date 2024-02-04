@@ -6,7 +6,7 @@ from src.application.Services.ResponseWrapper import ResponseWrapper
 from src.domain.repositories.IMovieTheaterRepository import IMovieTheaterRepository
 
 
-class Test_MovieTheaterServiceTest(unittest.TestCase):
+class Test_MovieTheaterService(unittest.TestCase):
     def setUp(self) -> None:
         self.movie_theater_repository = Mock(spec=IMovieTheaterRepository)
 
