@@ -61,7 +61,7 @@ class MovieRegionTicketsPurchesedController(IMovieRegionTicketsPurchesedControll
             )
 
     def update(self, http_request: HttpRequest) -> HttpResponse:
-        result_validate_body_update = self.__movie_region_tickets_purchesed_validate.movie_region_create_validate(
+        result_validate_body_update = self.__movie_region_tickets_purchesed_validate.movie_region_update_validate(
             http_request.body)
 
         if not result_validate_body_update.IsSuccess:

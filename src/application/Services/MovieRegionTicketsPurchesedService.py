@@ -15,7 +15,6 @@ class MovieRegionTicketsPurchesedService(IMovieRegionTicketsPurchesedService):
             movie_id, cinema_id)
 
         return movie_region_result
-     # criar lá no movieService 'MovieRegionTicketsPurchesed' tem que deletar a junção lá tbm
 
     def create(self, movie_region_tickets_purchesed_dto: MovieRegionTicketsPurchesedDTO) -> ResponseWrapper:
         if movie_region_tickets_purchesed_dto == None:

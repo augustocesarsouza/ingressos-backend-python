@@ -130,6 +130,8 @@ class MovieService(IMovieService):
         delete_movie_region_tickets_purchesed = self.__movie_region_tickets_purchesed_service.delete(
             id_movie)
 
+        # ao deletar chamaar FormOfPaymentService tenho relacionamento naquela tabela
+
         if not delete_movie_region_tickets_purchesed.IsSuccess:
             return delete_movie_region_tickets_purchesed
 
