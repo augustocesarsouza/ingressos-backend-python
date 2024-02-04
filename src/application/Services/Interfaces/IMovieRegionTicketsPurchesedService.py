@@ -16,3 +16,7 @@ class IMovieRegionTicketsPurchesedService(ABC):
     @abstractmethod
     def update(cls, movie_region_tickets_purchesed_dto: MovieRegionTicketsPurchesedDTO) -> ResponseWrapper:
         pass
+
+    @abstractmethod
+    def delete(self, movie_id: str) -> ResponseWrapper:
+        pass

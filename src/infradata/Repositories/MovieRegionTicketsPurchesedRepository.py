@@ -9,6 +9,37 @@ from sqlalchemy.exc import SQLAlchemyError
 class MovieRegionTicketsPurchesedRepository(IMovieRegionTicketsPurchesedRepository):
 
     @classmethod
+    def get_list_register_by_movie_id(cls, movie_id: str) -> ResponseWrapper:
+        with ApplicationDbContext() as database:
+            try:
+                database.session.begin()
+                movie_region_tickets_purchesed_list = (
+                    database.session
+                    .query(MovieRegionTicketsPurchesedMap.Id)
+                    .filter(MovieRegionTicketsPurchesedMap.MovieId == movie_id)
+                    .all()
+                )
+                database.session.commit()
+
+                if len(movie_region_tickets_purchesed_list) > 0:
+                    list_movie_region_tickets_purchesed = []
+
+                    for el in movie_region_tickets_purchesed_list:
+                        movie_region_tickets_purchesed_DTO = MovieRegionTicketsPurchesedDTO(id=el.Id, ticketsSeats=None,
+                                                                                            movieId=None, movieDTO=None, cinemaId=None, cinemaDTO=None)
+                        list_movie_region_tickets_purchesed.append(
+                            movie_region_tickets_purchesed_DTO)
+
+                    return ResponseWrapper.ok(list_movie_region_tickets_purchesed)
+                else:
+                    return ResponseWrapper.ok(movie_region_tickets_purchesed_list)
+
+            except SQLAlchemyError as exception:
+                database.session.rollback()
+                exception_name = type(exception).__name__
+                return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
+
+    @classmethod
     def get_by_movie_id_and_cinema_id(cls, movie_id: str, cinema_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -64,6 +95,27 @@ class MovieRegionTicketsPurchesedRepository(IMovieRegionTicketsPurchesedReposito
 
                 database.session.commit()
                 return ResponseWrapper.ok(movie_region_tickets_purchesed_dto.to_dict())
+            except SQLAlchemyError as exception:
+                database.session.rollback()
+                exception_name = type(exception).__name__
+                return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
+
+    @classmethod
+    def delete(cls, movie_region_tickets_purchesed_id: str) -> ResponseWrapper:
+        with ApplicationDbContext() as database:
+            try:
+                database.session.begin()
+
+                movie_region_tickets_purchesed = database.session.query(
+                    MovieRegionTicketsPurchesedMap).filter_by(Id=movie_region_tickets_purchesed_id).first()
+
+                database.session.delete(movie_region_tickets_purchesed)
+                database.session.commit()
+
+                movie_region_tickets_purchesed_DTO = MovieRegionTicketsPurchesedDTO(
+                    id=movie_region_tickets_purchesed.Id, ticketsSeats=movie_region_tickets_purchesed.TicketsSeats, movieId=None, movieDTO=None, cinemaId=None, cinemaDTO=None).to_dict()
+
+                return ResponseWrapper.ok(movie_region_tickets_purchesed_DTO)
             except SQLAlchemyError as exception:
                 database.session.rollback()
                 exception_name = type(exception).__name__

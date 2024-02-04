@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import Mock
 from src.application.DTOs.MovieDTO import MovieDTO
 from src.application.DTOs.RegionDTO import RegionDTO
+from src.application.Services.Interfaces.IMovieRegionTicketsPurchesedService import IMovieRegionTicketsPurchesedService
 
 from src.application.Services.MovieService import MovieService
 from src.application.Services.ResponseWrapper import ResponseWrapper
@@ -17,6 +18,8 @@ class Test_MovieServiceTest(unittest.TestCase):
         self.mock_movie_repository = Mock(spec=IMovieRepository)
         self.mock_movie_theater_service = Mock(spec=IMovieTheaterService)
         self.mock_region_service = Mock(spec=IRegionService)
+        self.mock_movie_region_tickets_purchesed_service = Mock(
+            spec=IMovieRegionTicketsPurchesedService)
         self.mock_cloudinary_uti = Mock(spec=ICloudinaryUti)
 
     # test func 'get_all_movie_by_region_id'
@@ -41,7 +44,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             movie_all)
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_all_movie_by_region_id("region")
         self.assertEqual(result.IsSuccess, True)
@@ -51,7 +54,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "error get region")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_all_movie_by_region_id("region")
         self.assertEqual(result.IsSuccess, False)
@@ -67,7 +70,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "error get all movie, database error")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_all_movie_by_region_id("region")
         self.assertEqual(result.IsSuccess, False)
@@ -85,7 +88,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             movie_all)
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_all_movie_by_region_id("region")
         self.assertEqual(result.IsSuccess, False)
@@ -97,7 +100,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "Ok, found movie")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_info_movies_by_id(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -108,7 +111,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "error, found movie")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_info_movies_by_id(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -120,7 +123,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "Ok, found movie, by statusMovie")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_status_movie("Highlight")
         self.assertEqual(result.IsSuccess, True)
@@ -130,7 +133,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "error, found movie, by statusMovie")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.get_status_movie("Highlight")
         self.assertEqual(result.IsSuccess, False)
@@ -149,14 +152,14 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie="statusMovie1", base_64_img="base64Img1")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.create(movie_DTO)
         self.assertEqual(result.IsSuccess, True)
 
     def test_create_with_error_movie_DTO_None(self):
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.create(None)
         self.assertEqual(result.IsSuccess, False)
@@ -169,7 +172,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie="statusMovie1", base_64_img="base64Img1")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.create(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -184,7 +187,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie="statusMovie1", base_64_img="base64Img1")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.create(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -202,7 +205,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie="statusMovie1", base_64_img="base64Img1")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.create(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -214,6 +217,9 @@ class Test_MovieServiceTest(unittest.TestCase):
 
         self.mock_movie_theater_service.delete.return_value = ResponseWrapper.ok(
             "ok, delete join")
+
+        self.mock_movie_region_tickets_purchesed_service.delete.return_value = ResponseWrapper.ok(
+            "ok, delete join movie_region_tickets_purchesed")
 
         movie_DTO = MovieDTO(id=None, title=None, description=None, gender=None, duration=None, movieRating=None, imgUrl=None, publicId="publicId1",
                              imgUrlBackground=None, publicIdImgBackgound="publicIdImgBackgound1", statusMovie=None, base_64_img=None).to_dict()
@@ -228,7 +234,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "deleted img background cloudinary")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -239,7 +245,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             None)
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -250,7 +256,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "error database")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -261,10 +267,30 @@ class Test_MovieServiceTest(unittest.TestCase):
             "ok, found movie")
 
         self.mock_movie_theater_service.delete.return_value = ResponseWrapper.fail(
-            "error")
+            "error delete join movie_theater")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
+
+        result = movie_service.delete_movie(
+            "961b70f2-232f-4a10-930c-601064ab2cac")
+        self.assertEqual(result.IsSuccess, False)
+
+    def test_delete_movie_with_error_when_delete_join_movie_region_tickets_purchesed(self):
+        self.mock_movie_repository.get_by_id.return_value = ResponseWrapper.ok(
+            "ok, found movie")
+
+        self.mock_movie_theater_service.delete.return_value = ResponseWrapper.ok(
+            "ok, delete join")
+
+        self.mock_movie_region_tickets_purchesed_service.delete.return_value = ResponseWrapper.ok(
+            "ok, delete join movie_region_tickets_purchesed")
+
+        self.mock_movie_region_tickets_purchesed_service.delete.return_value = ResponseWrapper.fail(
+            "error delete movie_region_tickets_purchesed")
+
+        movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -277,11 +303,14 @@ class Test_MovieServiceTest(unittest.TestCase):
         self.mock_movie_theater_service.delete.return_value = ResponseWrapper.ok(
             "ok, delete join")
 
+        self.mock_movie_region_tickets_purchesed_service.delete.return_value = ResponseWrapper.ok(
+            "ok, delete join movie_region_tickets_purchesed")
+
         self.mock_movie_repository.delete.return_value = ResponseWrapper.fail(
             "error when delete movie")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -294,6 +323,9 @@ class Test_MovieServiceTest(unittest.TestCase):
         self.mock_movie_theater_service.delete.return_value = ResponseWrapper.ok(
             "ok, delete join")
 
+        self.mock_movie_region_tickets_purchesed_service.delete.return_value = ResponseWrapper.ok(
+            "ok, delete join movie_region_tickets_purchesed")
+
         movie_DTO = MovieDTO(id=None, title=None, description=None, gender=None, duration=None, movieRating=None, imgUrl=None, publicId="publicId1",
                              imgUrlBackground=None, publicIdImgBackgound="publicIdImgBackgound1", statusMovie=None, base_64_img=None).to_dict()
 
@@ -304,7 +336,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "soma error occurred when delete img main")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -316,6 +348,9 @@ class Test_MovieServiceTest(unittest.TestCase):
 
         self.mock_movie_theater_service.delete.return_value = ResponseWrapper.ok(
             "ok, delete join")
+
+        self.mock_movie_region_tickets_purchesed_service.delete.return_value = ResponseWrapper.ok(
+            "ok, delete join movie_region_tickets_purchesed")
 
         movie_DTO = MovieDTO(id=None, title=None, description=None, gender=None, duration=None, movieRating=None, imgUrl=None, publicId="publicId1",
                              imgUrlBackground=None, publicIdImgBackgound="publicIdImgBackgound1", statusMovie=None, base_64_img=None).to_dict()
@@ -330,7 +365,7 @@ class Test_MovieServiceTest(unittest.TestCase):
             "soma error occurred when delete img background")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.delete_movie(
             "961b70f2-232f-4a10-930c-601064ab2cac")
@@ -361,7 +396,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, True)
@@ -374,7 +409,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -388,7 +423,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -407,7 +442,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -431,7 +466,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -455,7 +490,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -485,7 +520,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)
@@ -514,7 +549,7 @@ class Test_MovieServiceTest(unittest.TestCase):
                              imgUrlBackground=None, publicIdImgBackgound=None, statusMovie=None, base_64_img="seila_base_64")
 
         movie_service = MovieService(self.mock_movie_repository, self.mock_movie_theater_service,
-                                     self.mock_region_service, self.mock_cloudinary_uti)
+                                     self.mock_region_service, self.mock_movie_region_tickets_purchesed_service, self.mock_cloudinary_uti)
 
         result = movie_service.update_movie(movie_DTO)
         self.assertEqual(result.IsSuccess, False)

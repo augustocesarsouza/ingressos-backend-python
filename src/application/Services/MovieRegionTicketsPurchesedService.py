@@ -63,3 +63,28 @@ class MovieRegionTicketsPurchesedService(IMovieRegionTicketsPurchesedService):
             movie_region_tickets_data)
 
         return result_update
+
+    def delete(self, movie_id: str) -> ResponseWrapper:
+        if len(movie_id) < 36:
+            return ResponseWrapper.fail("error movie_id provided must be greater than or equal to 36")
+
+        result_get_list_register_by_movie_id = self.__movie_region_tickets_purchesed_repository.get_list_register_by_movie_id(
+            movie_id)
+
+        if not result_get_list_register_by_movie_id.IsSuccess:
+            return result_get_list_register_by_movie_id
+
+        movie_region_tickets_purchesed_list: list[
+            MovieRegionTicketsPurchesedDTO] = result_get_list_register_by_movie_id.Data
+
+        if len(movie_region_tickets_purchesed_list) <= 0:
+            return ResponseWrapper.ok("not exist register with this movie_id")
+
+        for el in movie_region_tickets_purchesed_list:
+            result_delete_register_of_the_table = self.__movie_region_tickets_purchesed_repository.delete(
+                el.Id)
+
+            if not result_delete_register_of_the_table.IsSuccess:
+                return ResponseWrapper.fail("error when delete register from movie_region_tickets_purchesed")
+
+        return ResponseWrapper.ok("all deleted")

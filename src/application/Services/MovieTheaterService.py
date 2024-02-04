@@ -28,7 +28,7 @@ class MovieTheaterService(IMovieTheaterService):
                 result_delete_movie_theater = self.__movie_theater_repository.delete(
                     el['id'])
 
-        if not result_delete_movie_theater.IsSuccess:
-            return result_delete_movie_theater
+                if not result_delete_movie_theater.IsSuccess:
+                    return ResponseWrapper.fail("error when delete register from movie_theater")
 
-        return result_delete_movie_theater
+        return ResponseWrapper.ok("all deleted")

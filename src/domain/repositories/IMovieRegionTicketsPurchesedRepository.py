@@ -8,6 +8,10 @@ from src.infradata.Maps.MovieRegionTicketsPurchesedMap import MovieRegionTickets
 class IMovieRegionTicketsPurchesedRepository(ABC):
 
     @abstractmethod
+    def get_list_register_by_movie_id(cls, movie_id: str) -> ResponseWrapper:
+        pass
+
+    @abstractmethod
     def get_by_movie_id_and_cinema_id(cls, movie_id: str, cinema_id: str) -> ResponseWrapper:
         pass
 
@@ -17,4 +21,8 @@ class IMovieRegionTicketsPurchesedRepository(ABC):
 
     @abstractmethod
     def update(cls, movie_region_tickets_purchesed_dto: MovieRegionTicketsPurchesedDTO) -> ResponseWrapper:
+        pass
+
+    @abstractmethod
+    def delete(cls, movie_region_tickets_purchesed_id: str) -> ResponseWrapper:
         pass
