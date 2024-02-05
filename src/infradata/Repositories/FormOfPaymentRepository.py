@@ -9,6 +9,34 @@ from sqlalchemy.exc import SQLAlchemyError
 class FormOfPaymentRepository(IFormOfPaymentRepository):
 
     @classmethod
+    def get_all_form_of_payment_id_by_movie_id(cls, movie_id: str) -> ResponseWrapper:
+        with ApplicationDbContext() as database:
+            try:
+                database.session.begin()
+                list_form_of_payment = (
+                    database.session
+                    .query(FormOfPaymentMap.Id)
+                    .filter(FormOfPaymentMap.MovieId == movie_id)
+                    .all()
+                )
+                database.session.commit()
+
+                if list_form_of_payment != None:
+                    array = []
+                    for el in list_form_of_payment:
+                        form_of_payment_dto = FormOfPaymentDTO(
+                            id=el.Id, formName=None, price=None, movieId=None).to_dict()
+                        array.append(form_of_payment_dto)
+
+                    return ResponseWrapper.ok(array)
+                else:
+                    return ResponseWrapper.ok(list_form_of_payment)
+            except SQLAlchemyError as exception:
+                database.session.rollback()
+                exception_name = type(exception).__name__
+                return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
+
+    @classmethod
     def get_movie_Id_info(cls, movie_id: str) -> ResponseWrapper:
         with ApplicationDbContext() as database:
             try:
@@ -52,3 +80,25 @@ class FormOfPaymentRepository(IFormOfPaymentRepository):
             database.session.rollback()
             exception_name = type(exception).__name__
             return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")
+
+    @classmethod
+    def delete(cls, form_of_payment_id: str) -> ResponseWrapper:
+        with ApplicationDbContext() as database:
+
+            try:
+                database.session.begin()
+
+                delete_form = database.session.query(FormOfPaymentMap).filter(
+                    FormOfPaymentMap.Id == form_of_payment_id).first()
+
+                database.session.delete(delete_form)
+                database.session.commit()
+
+                form_of_payment_dto = FormOfPaymentDTO(
+                    id=delete_form.Id, formName=delete_form.FormName, price=None, movieId=None).to_dict()
+
+                return ResponseWrapper.ok(form_of_payment_dto)
+            except SQLAlchemyError as exception:
+                database.session.rollback()
+                exception_name = type(exception).__name__
+                return ResponseWrapper.fail(f"Erro: {exception_name}, Detalhes: {str(exception)}")

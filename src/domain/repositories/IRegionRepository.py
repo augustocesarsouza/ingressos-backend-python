@@ -5,7 +5,7 @@ from src.application.Services.ResponseWrapper import ResponseWrapper
 class IRegionRepository(ABC):
 
     @abstractmethod
-    def get_region_by_id_check_exist(self, region_id: str) -> ResponseWrapper:
+    def get_region_by_id_check_exist(cls, region_id: str) -> ResponseWrapper:
         pass
 
     @abstractmethod

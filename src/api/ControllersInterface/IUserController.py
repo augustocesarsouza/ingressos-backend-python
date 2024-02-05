@@ -6,17 +6,17 @@ from src.api.HttpTypes.HttpResponse import HttpResponse
 class IUserController(ABC):
 
     @abstractmethod
-    def create_async(self, http_request: HttpRequest) -> HttpResponse:
+    def create_async(cls, http_request: HttpRequest) -> HttpResponse:
         pass
 
     @abstractmethod
-    def login_user(self, http_request: HttpRequest) -> HttpResponse:
+    def login_user(cls, http_request: HttpRequest) -> HttpResponse:
         pass
 
     @abstractmethod
-    def verfic_token(self, http_request: HttpRequest) -> HttpResponse:
+    def verfic_token(cls, http_request: HttpRequest) -> HttpResponse:
         pass
 
     @abstractmethod
-    def get_confirm_token(self, http_request: HttpRequest) -> HttpResponse:
+    def get_confirm_token(cls, http_request: HttpRequest) -> HttpResponse:
         pass

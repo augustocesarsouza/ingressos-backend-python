@@ -18,5 +18,5 @@ class IMovieRegionTicketsPurchesedService(ABC):
         pass
 
     @abstractmethod
-    def delete(self, movie_id: str) -> ResponseWrapper:
+    def delete(cls, movie_id: str) -> ResponseWrapper:
         pass

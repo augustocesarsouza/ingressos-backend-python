@@ -8,9 +8,9 @@ services:
     image: mysql:8.1
     volumes:
       # - mysql_volume:/var/lib/mysql
-      - ./SqlData/mysql_data_volume:/var/lib/mysql
-      - ./SqlData/mysql_log_volume:/var/lib/mysql
-      - ./SqlData/mysql_secrets_volume:/var/lib/mysql
+      - ./MySql/mysql_data_volume:/var/lib/mysql
+      # - ./MySql/mysql_log_volume:/var/lib/mysql
+      # - ./MySql/mysql_secrets_volume:/var/lib/mysql
     ports:
      - 3307:3306
     networks:

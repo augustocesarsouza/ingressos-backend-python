@@ -1,6 +1,12 @@
 from src.api.Controllers.MovieController import MovieController
 from src.api.ControllersInterface.IMovieController import IMovieController
 from src.api.Validators.MovieValidate import MovieValidate
+from src.application.Services.CinemaMovieService import CinemaMovieService
+from src.application.Services.CinemaService import CinemaService
+from src.application.Services.FormOfPaymentService import FormOfPaymentService
+from src.infradata.Repositories.CinemaRepository import CinemaRepository
+from src.infradata.Repositories.CinemaMovieRepository import CinemaMovieRepository
+from src.infradata.Repositories.FormOfPaymentRepository import FormOfPaymentRepository
 from src.infradata.UtilityExternal.CloudinaryUti import CloudinaryUti
 from src.application.Services.MovieRegionTicketsPurchesedService import MovieRegionTicketsPurchesedService
 from src.infradata.Repositories.MovieRegionTicketsPurchesedRepository import MovieRegionTicketsPurchesedRepository
@@ -24,8 +30,18 @@ def movie_controller_injection() -> IMovieController:
     movie_theater_repository = MovieTheaterRepository()
     movie_theater_service = MovieTheaterService(movie_theater_repository)
 
+    form_of_payment_repository = FormOfPaymentRepository()
+    form_of_payment_service = FormOfPaymentService(form_of_payment_repository)
+
+    cinema_movie_repository = CinemaMovieRepository()
+    cinema_repository = CinemaRepository()
+    cinema_service = CinemaService(cinema_repository)
+
+    cinema_movie_service = CinemaMovieService(
+        cinema_movie_repository, region_service, cinema_service, None)
+
     movie_service = MovieService(
-        movie_repository, movie_theater_service, region_service, movie_region_tickets_purchesed_service, cloudinary_uti)
+        movie_repository, movie_theater_service, region_service, movie_region_tickets_purchesed_service, form_of_payment_service, cinema_movie_service, cloudinary_uti)
     movie_validate = MovieValidate()
 
     controller = MovieController(movie_service, movie_validate)

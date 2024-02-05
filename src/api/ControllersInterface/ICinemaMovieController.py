@@ -6,9 +6,9 @@ from src.api.HttpTypes.HttpResponse import HttpResponse
 class ICinemaMovieController(ABC):
 
     @abstractmethod
-    def get_by_region_cinema_id_and_movie_id(self, http_request: HttpRequest) -> HttpResponse:
+    def get_by_region_cinema_id_and_movie_id(cls, http_request: HttpRequest) -> HttpResponse:
         pass
 
     @abstractmethod
-    def create(self, http_request: HttpRequest) -> HttpResponse:
+    def create(cls, http_request: HttpRequest) -> HttpResponse:
         pass

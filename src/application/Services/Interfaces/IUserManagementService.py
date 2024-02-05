@@ -7,5 +7,5 @@ from src.infradata.Maps.AdditionalInfoUserMap import AdditionalInfoUserMap
 class IUserManagementService(ABC):
 
     @abstractmethod
-    def create_async(self, user_DTO: UserDTO, additional_info_user_map: AdditionalInfoUserMap, password: str) -> ResponseWrapper:
+    def create_async(cls, user_DTO: UserDTO, additional_info_user_map: AdditionalInfoUserMap, password: str) -> ResponseWrapper:
         pass

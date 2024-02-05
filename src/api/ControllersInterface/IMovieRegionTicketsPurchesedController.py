@@ -6,13 +6,13 @@ from src.api.HttpTypes.HttpResponse import HttpResponse
 class IMovieRegionTicketsPurchesedController(ABC):
 
     @abstractmethod
-    def get_by_movie_id_and_cinema_id(self, http_request: HttpRequest) -> HttpResponse:
+    def get_by_movie_id_and_cinema_id(cls, http_request: HttpRequest) -> HttpResponse:
         pass
 
     @abstractmethod
-    def create(self, http_request: HttpRequest) -> HttpResponse:
+    def create(cls, http_request: HttpRequest) -> HttpResponse:
         pass
 
     @abstractmethod
-    def update(self, http_request: HttpRequest) -> HttpResponse:
+    def update(cls, http_request: HttpRequest) -> HttpResponse:
         pass

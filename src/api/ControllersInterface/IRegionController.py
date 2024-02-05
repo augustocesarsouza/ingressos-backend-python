@@ -7,5 +7,5 @@ from src.api.HttpTypes.HttpResponse import HttpResponse
 class IRegionController(ABC):
 
     @abstractmethod
-    def get_all_movie_by_region_id(self, http_request: HttpRequest) -> HttpResponse:
+    def get_all_movie_by_region_id(cls, http_request: HttpRequest) -> HttpResponse:
         pass

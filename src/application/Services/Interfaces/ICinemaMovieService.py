@@ -6,9 +6,13 @@ from src.application.Services.ResponseWrapper import ResponseWrapper
 class ICinemaMovieService(ABC):
 
     @abstractmethod
-    def get_by_region_cinema_id_and_movie_id(self, city_name: str, movie_id: str) -> ResponseWrapper:
+    def get_by_region_cinema_id_and_movie_id(cls, city_name: str, movie_id: str) -> ResponseWrapper:
         pass
 
     @abstractmethod
-    def create(self, cinema_movie_dto: CinemaMovieDTO) -> ResponseWrapper:
+    def create(cls, cinema_movie_dto: CinemaMovieDTO) -> ResponseWrapper:
+        pass
+
+    @abstractmethod
+    def delete(cls, movie_id: str) -> ResponseWrapper:
         pass

@@ -63,3 +63,28 @@ class CinemaMovieService(ICinemaMovieService):
             cinema_movie_map)
 
         return result_create_cinema_movie
+
+    def delete(self, movie_id: str) -> ResponseWrapper:
+        if len(movie_id) < 36:
+            return ResponseWrapper.fail("error movie_id provided must be greater than or equal to 36")
+
+        result_get_list_cinema_movie_id = self.__cinema_movie_repository.get_all_cinema_movie_id_by_movie_id(
+            movie_id)
+
+        if not result_get_list_cinema_movie_id.IsSuccess:
+            return result_get_list_cinema_movie_id
+
+        list_cinema_movie_id: list[
+            CinemaMovieDTO] = result_get_list_cinema_movie_id.Data
+
+        if len(list_cinema_movie_id) <= 0:
+            return ResponseWrapper.ok("not exist register with this movie_id")
+
+        for el in list_cinema_movie_id:
+            result_delete_register_of_the_table = self.__cinema_movie_repository.delete(
+                el["id"])
+
+            if not result_delete_register_of_the_table.IsSuccess:
+                return ResponseWrapper.fail("error when delete register from movie_region_tickets_purchesed")
+
+        return ResponseWrapper.ok("all deleted")

@@ -7,17 +7,17 @@ from src.infradata.Maps.AdditionalInfoUserMap import AdditionalInfoUserMap
 class IAdditionalInfoUserRepository(ABC):
 
     @abstractmethod
-    def create_info(self, infoUser: AdditionalInfoUserMap) -> ResponseWrapper:
+    def create_info(cls, infoUser: AdditionalInfoUserMap) -> ResponseWrapper:
         pass
 
     @abstractmethod
-    def get_info_user(self, id_guid: str) -> ResponseWrapper:
+    def get_info_user(cls, id_guid: str) -> ResponseWrapper:
         pass
 
     @abstractmethod
-    def get_by_id_guid_user(self, id_guid: str) -> ResponseWrapper:
+    def get_by_id_guid_user(cls, id_guid: str) -> ResponseWrapper:
         pass
 
     @abstractmethod
-    def update_async(self, infoUser: AdditionalInfoUserDTO) -> ResponseWrapper:
+    def update_async(cls, infoUser: AdditionalInfoUserDTO) -> ResponseWrapper:
         pass

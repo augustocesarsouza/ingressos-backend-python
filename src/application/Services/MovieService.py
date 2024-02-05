@@ -1,6 +1,8 @@
 import uuid
 from src.application.DTOs.MovieDTO import MovieDTO
 from src.application.DTOs.RegionDTO import RegionDTO
+from src.application.Services.Interfaces.ICinemaMovieService import ICinemaMovieService
+from src.application.Services.Interfaces.IFormOfPaymentService import IFormOfPaymentService
 from src.application.Services.Interfaces.IMovieRegionTicketsPurchesedService import IMovieRegionTicketsPurchesedService
 from src.application.Services.Interfaces.IMovieService import IMovieService
 from src.application.Services.Interfaces.IMovieTheaterService import IMovieTheaterService
@@ -13,11 +15,13 @@ from src.infradata.UtilityExternal.Interface.ICloudinaryUti import ICloudinaryUt
 
 
 class MovieService(IMovieService):
-    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, movie_region_tickets_purchesed_service: IMovieRegionTicketsPurchesedService, cloudinary_util: ICloudinaryUti) -> None:
+    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, movie_region_tickets_purchesed_service: IMovieRegionTicketsPurchesedService, form_of_payment_service: IFormOfPaymentService, cinema_movie_service: ICinemaMovieService, cloudinary_util: ICloudinaryUti) -> None:
         self.__movie_repository = movie_repository
         self.__movie_theater_service = movie_theater_service
         self.__region_service = region_service
         self.__movie_region_tickets_purchesed_service = movie_region_tickets_purchesed_service
+        self.__form_of_payment_service = form_of_payment_service
+        self.__cinema_movie_service = cinema_movie_service
         self.__cloudinary_util = cloudinary_util
 
     def get_movie_by_id_check_exist(self, movie_id: str) -> ResponseWrapper:
@@ -130,10 +134,20 @@ class MovieService(IMovieService):
         delete_movie_region_tickets_purchesed = self.__movie_region_tickets_purchesed_service.delete(
             id_movie)
 
-        # ao deletar chamaar FormOfPaymentService tenho relacionamento naquela tabela
-
         if not delete_movie_region_tickets_purchesed.IsSuccess:
             return delete_movie_region_tickets_purchesed
+
+        delete_relation_between_form_payment_and_movie = self.__form_of_payment_service.delete(
+            id_movie)
+
+        if not delete_relation_between_form_payment_and_movie.IsSuccess:
+            return delete_relation_between_form_payment_and_movie
+
+        delete_relation_between_cinema_movie_and_movie = self.__cinema_movie_service.delete(
+            id_movie)
+
+        if not delete_relation_between_cinema_movie_and_movie.IsSuccess:
+            return delete_relation_between_cinema_movie_and_movie
 
         movie_delete_result = self.__movie_repository.delete(id_movie)
 

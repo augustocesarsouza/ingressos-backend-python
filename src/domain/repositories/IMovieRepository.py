@@ -12,7 +12,7 @@ class IMovieRepository(ABC):
         pass
 
     @abstractmethod
-    def get_movie_by_id_check_exist(self, movie_id: str) -> ResponseWrapper:
+    def get_movie_by_id_check_exist(cls, movie_id: str) -> ResponseWrapper:
         pass
 
     @abstractmethod
