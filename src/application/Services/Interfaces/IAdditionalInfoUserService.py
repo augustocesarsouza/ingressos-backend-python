@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from src.application.DTOs.AdditionalInfoUserDTO import AdditionalInfoUserDTO
 from src.application.Services.ResponseWrapper import ResponseWrapper
+from src.application.DTOs.AdditionalInfoUserDTO import AdditionalInfoUserDTO
 
 
 class IAdditionalInfoUserService(ABC):

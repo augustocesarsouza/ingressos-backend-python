@@ -101,17 +101,11 @@ class MovieService(IMovieService):
         create_img_base64: CloudinaryCreate = result_create_cloudinary.Data
         create_img_background: CloudinaryCreate = result_img_background.Data
 
-        movie_DTO.add_imgUrl_PublicId_ImgUrlBackground_PublicIdImgBackgound(
-            create_img_base64.img_url, create_img_base64.public_id, create_img_background.img_url, create_img_background.public_id)
-
         movie_map = MovieMap(Id=guid_str, Title=movie_DTO.Title, Description=movie_DTO.Description, Gender=movie_DTO.Gender, Duration=movie_DTO.Duration,
-                             MovieRating=movie_DTO.MovieRating, ImgUrl=movie_DTO.ImgUrl, PublicId=movie_DTO.PublicId, ImgUrlBackground=movie_DTO.ImgUrlBackground,
-                             PublicIdImgBackgound=movie_DTO.PublicIdImgBackgound, StatusMovie=movie_DTO.StatusMovie)
+                             MovieRating=movie_DTO.MovieRating, ImgUrl=create_img_base64.img_url, PublicId=create_img_base64.public_id, ImgUrlBackground=create_img_background.img_url,
+                             PublicIdImgBackgound=create_img_background.public_id, StatusMovie=movie_DTO.StatusMovie)
 
         result_create = self.__movie_repository.create(movie_map)
-
-        if not result_create.IsSuccess:
-            return result_create
 
         return result_create
 
