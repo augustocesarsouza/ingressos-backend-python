@@ -8,7 +8,7 @@ class CinemaMovieDTO:
         self.MovieId = movieId
         self.RegionId = regionId
         self.ScreeningSchedule = screeningSchedule
-        self.Cinema = cinemaDTO
+        self.CinemaDTO = cinemaDTO
 
     def to_dict(self):
         return {

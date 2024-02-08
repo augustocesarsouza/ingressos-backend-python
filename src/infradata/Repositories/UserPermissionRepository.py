@@ -40,7 +40,6 @@ class UserPermissionRepository(IUserPermissionRepository):
                     }
                     array.append(obj)
 
-                print(array)
                 database.session.commit()
                 return ResponseWrapper.ok(array)
             except SQLAlchemyError as exception:

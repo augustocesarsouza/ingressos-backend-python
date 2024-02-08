@@ -1,9 +1,11 @@
 from src.api.Controllers.MovieController import MovieController
 from src.api.ControllersInterface.IMovieController import IMovieController
 from src.api.Validators.MovieValidate import MovieValidate
+from src.application.Services.AdditionalFoodMovieService import AdditionalFoodMovieService
 from src.application.Services.CinemaMovieService import CinemaMovieService
 from src.application.Services.CinemaService import CinemaService
 from src.application.Services.FormOfPaymentService import FormOfPaymentService
+from src.infradata.Repositories.AdditionalFoodMovieRepository import AdditionalFoodMovieRepository
 from src.infradata.Repositories.CinemaRepository import CinemaRepository
 from src.infradata.Repositories.CinemaMovieRepository import CinemaMovieRepository
 from src.infradata.Repositories.FormOfPaymentRepository import FormOfPaymentRepository
@@ -37,11 +39,15 @@ def movie_controller_injection() -> IMovieController:
     cinema_repository = CinemaRepository()
     cinema_service = CinemaService(cinema_repository)
 
+    additional_food_movie_repository = AdditionalFoodMovieRepository()
+    additional_food_movie_service = AdditionalFoodMovieService(
+        additional_food_movie_repository, cloudinary_uti)
+
     cinema_movie_service = CinemaMovieService(
         cinema_movie_repository, region_service, cinema_service, None)
 
     movie_service = MovieService(
-        movie_repository, movie_theater_service, region_service, movie_region_tickets_purchesed_service, form_of_payment_service, cinema_movie_service, cloudinary_uti)
+        movie_repository, movie_theater_service, region_service, movie_region_tickets_purchesed_service, form_of_payment_service, cinema_movie_service, additional_food_movie_service, cloudinary_uti)
     movie_validate = MovieValidate()
 
     controller = MovieController(movie_service, movie_validate)

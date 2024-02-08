@@ -13,14 +13,22 @@ class AdditionalInfoUserRepository(IAdditionalInfoUserRepository):
         with ApplicationDbContext() as database:
             try:
                 database.session.begin()
-                user = (
+                additional = (
                     database.session
                     .query(AdditionalInfoUserMap.BirthDate, AdditionalInfoUserMap.Gender, AdditionalInfoUserMap.Phone, AdditionalInfoUserMap.Cep, AdditionalInfoUserMap.Logradouro, AdditionalInfoUserMap.Numero, AdditionalInfoUserMap.Complemento, AdditionalInfoUserMap.Referencia, AdditionalInfoUserMap.Bairro, AdditionalInfoUserMap.Estado, AdditionalInfoUserMap.Cidade)
                     .filter(AdditionalInfoUserMap.UserId == id_guid)
                     .first()
                 )
                 database.session.commit()
-                return ResponseWrapper.ok(user)
+
+                if additional != None:
+                    additionalInfoUserDTO = AdditionalInfoUserDTO(id=None, userId=None, birthDate=additional.BirthDate, birthDateString=None, gender=additional.Gender, phone=additional.Phone, logradouro=additional.Logradouro,
+                                                                  numero=additional.Numero, complemento=additional.Complemento, referencia=additional.Referencia, bairro=additional.Bairro, estado=additional.Estado, cidade=additional.Cidade).to_dict()
+
+                    return ResponseWrapper.ok(additionalInfoUserDTO)
+                else:
+                    return ResponseWrapper.ok(additional)
+
             except SQLAlchemyError as exception:
                 database.session.rollback()
                 exception_name = type(exception).__name__

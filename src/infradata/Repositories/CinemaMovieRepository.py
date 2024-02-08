@@ -15,25 +15,29 @@ class CinemaMovieRepository(ICinemaMovieRepository):
         with ApplicationDbContext() as database:
             try:
                 database.session.begin()
-                cinema_movie = (  # testar esse GET
+                cinema_movie_list = (  # testar esse GET
                     database.session
                     .query(CinemaMovieMap.ScreeningSchedule, CinemaMap.Id, CinemaMap.NameCinema, CinemaMap.District, CinemaMap.Ranking)
-                    .filter(CinemaMovieMap.RegionId == region_id and CinemaMovieMap.MovieId == movie_id)
-                    .first()
+                    .join(CinemaMap, CinemaMap.Id == CinemaMovieMap.CinemaId)
+                    .filter(CinemaMovieMap.RegionId == region_id, CinemaMovieMap.MovieId == movie_id)
+                    .all()
                 )
                 database.session.commit()
 
-                if cinema_movie != None:
-                    cinema_dto = CinemaDTO(
-                        id=cinema_movie.Id, nameCinema=cinema_movie.NameCinema, district=cinema_movie.District, ranking=cinema_movie.Ranking).to_dict()
+                if cinema_movie_list != None:
+                    array = []
+                    for el in cinema_movie_list:
+                        cinema_dto = CinemaDTO(
+                            id=el.Id, nameCinema=el.NameCinema, district=el.District, ranking=el.Ranking).to_dict()
 
-                    cinema_movie_DTO = CinemaMovieDTO(id=None, cinemaId=None, movieId=None, regionId=None,
-                                                      screeningSchedule=cinema_movie.ScreeningSchedule,
-                                                      cinemaDTO=cinema_dto).to_dict()
+                        cinema_movie_DTO = CinemaMovieDTO(id=None, cinemaId=None, movieId=None, regionId=None,
+                                                          screeningSchedule=el.ScreeningSchedule,
+                                                          cinemaDTO=cinema_dto).to_dict()
+                        array.append(cinema_movie_DTO)
 
-                    return ResponseWrapper.ok(cinema_movie_DTO)
+                    return ResponseWrapper.ok(array)
                 else:
-                    return ResponseWrapper.ok(cinema_movie)
+                    return ResponseWrapper.ok(cinema_movie_list)
 
             except SQLAlchemyError as exception:
                 database.session.rollback()

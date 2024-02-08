@@ -44,6 +44,7 @@ class SendEmailBrevo(ISendEmailBrevo):
         html_content = f"Seu numero de Confirmação: {str(code_randon)}"
         sender = {"name": "augusto",
                   "email": "augustocesarsantana90@gmail.com"}
+
         to = [{"email": f"{user['email']}", "name": f"{user['name']}"}]
         cc = [{"email": "example2@example2.com", "name": "Janice Doe"}]
         bcc = [{"name": "John Doe", "email": "example@example.com"}]

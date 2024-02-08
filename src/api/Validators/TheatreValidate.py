@@ -44,7 +44,6 @@ class TheatreValidate(ITheatreValidate):
         try:
             # Tenta converter a string de data para o formato desejado
             result = datetime.strptime(value, "%d/%m/%Y %H:%M")
-            print(result)
             return result
         except ValueError:
             # Se a conversão falhar, retorna None ou levanta uma exceção, dependendo da sua lógica

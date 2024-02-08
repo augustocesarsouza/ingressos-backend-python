@@ -53,8 +53,8 @@ class MovieRegionTicketsPurchesedRepository(IMovieRegionTicketsPurchesedReposito
                 database.session.commit()
 
                 if movie_region_tickets_purchesed != None:
-                    movie_region_tickets_purchesed_DTO = MovieRegionTicketsPurchesedDTO(id=movie_region_tickets_purchesed.Id, ticketsSeats=movie_region_tickets_purchesed.TicketsSeats,
-                                                                                        movieId=None, movieDTO=None, cinemaId=None, cinemaDTO=None)
+                    movie_region_tickets_purchesed_DTO = MovieRegionTicketsPurchesedDTO(
+                        id=movie_region_tickets_purchesed.Id, ticketsSeats=movie_region_tickets_purchesed.TicketsSeats, movieId=None, movieDTO=None, cinemaId=None, cinemaDTO=None).to_dict()
 
                     return ResponseWrapper.ok(movie_region_tickets_purchesed_DTO)
                 else:

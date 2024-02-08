@@ -67,24 +67,28 @@ class TheatreRepository(ITheatreRepository):
                         TheatreMap.Id, TheatreMap.Title, TheatreMap.Data, TheatreMap.Location, TheatreMap.ImgUrl
                     ).all()
                 )
-
-                array = []
-
-                for item in theatres:
-                    data_string = str(item.Data)
-                    data_hour_minute = data_string.split(" ")
-
-                    obj = {
-                        "id": item.Id,
-                        "title": item.Title,
-                        "data": f"{data_hour_minute[0]}T{data_hour_minute[1]}",
-                        "location": item.Location,
-                        "imgUrl": item.ImgUrl
-                    }
-                    array.append(obj)
-
                 database.session.commit()
-                return ResponseWrapper.ok(array)
+
+                if theatres != None:
+                    array = []
+
+                    for item in theatres:
+                        data_string = str(item.Data)
+                        data_hour_minute = data_string.split(" ")
+
+                        obj = {
+                            "id": item.Id,
+                            "title": item.Title,
+                            "data": f"{data_hour_minute[0]}T{data_hour_minute[1]}",
+                            "location": item.Location,
+                            "imgUrl": item.ImgUrl
+                        }
+                        array.append(obj)
+
+                    return ResponseWrapper.ok(array)
+                else:
+                    return ResponseWrapper.ok(theatres)
+
             except SQLAlchemyError as exception:
                 database.session.rollback()
                 exception_name = type(exception).__name__

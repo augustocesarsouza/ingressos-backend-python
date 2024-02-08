@@ -1,6 +1,7 @@
 import uuid
 from src.application.DTOs.MovieDTO import MovieDTO
 from src.application.DTOs.RegionDTO import RegionDTO
+from src.application.Services.Interfaces.IAdditionalFoodMovieService import IAdditionalFoodMovieService
 from src.application.Services.Interfaces.ICinemaMovieService import ICinemaMovieService
 from src.application.Services.Interfaces.IFormOfPaymentService import IFormOfPaymentService
 from src.application.Services.Interfaces.IMovieRegionTicketsPurchesedService import IMovieRegionTicketsPurchesedService
@@ -15,13 +16,14 @@ from src.infradata.UtilityExternal.Interface.ICloudinaryUti import ICloudinaryUt
 
 
 class MovieService(IMovieService):
-    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, movie_region_tickets_purchesed_service: IMovieRegionTicketsPurchesedService, form_of_payment_service: IFormOfPaymentService, cinema_movie_service: ICinemaMovieService, cloudinary_util: ICloudinaryUti) -> None:
+    def __init__(self, movie_repository: IMovieRepository, movie_theater_service: IMovieTheaterService, region_service: IRegionService, movie_region_tickets_purchesed_service: IMovieRegionTicketsPurchesedService, form_of_payment_service: IFormOfPaymentService, cinema_movie_service: ICinemaMovieService, additional_food_movie_service: IAdditionalFoodMovieService, cloudinary_util: ICloudinaryUti) -> None:
         self.__movie_repository = movie_repository
         self.__movie_theater_service = movie_theater_service
         self.__region_service = region_service
         self.__movie_region_tickets_purchesed_service = movie_region_tickets_purchesed_service
         self.__form_of_payment_service = form_of_payment_service
         self.__cinema_movie_service = cinema_movie_service
+        self.__additional_food_movie_service = additional_food_movie_service
         self.__cloudinary_util = cloudinary_util
 
     def get_movie_by_id_check_exist(self, movie_id: str) -> ResponseWrapper:
@@ -45,7 +47,7 @@ class MovieService(IMovieService):
         region_obj: RegionDTO = id_region_result.Data
 
         movie_all_result = self.__movie_repository.get_all_movie_by_region_id(
-            region_obj.Id)
+            region_obj["id"])
 
         if not movie_all_result.IsSuccess:
             return movie_all_result
@@ -53,9 +55,7 @@ class MovieService(IMovieService):
         if movie_all_result.Data == None or len(movie_all_result.Data) <= 0:
             return ResponseWrapper.fail("we did not find movies")
 
-        movie_all = movie_all_result.Data
-
-        return ResponseWrapper.ok(movie_all)
+        return movie_all_result
 
     def get_info_movies_by_id(self, id: str) -> ResponseWrapper:
         movie_result = self.__movie_repository.get_info_movies_by_id(id)
@@ -142,6 +142,12 @@ class MovieService(IMovieService):
 
         if not delete_relation_between_cinema_movie_and_movie.IsSuccess:
             return delete_relation_between_cinema_movie_and_movie
+
+        delete_relation_between_additional_food_movie_and_movie = self.__additional_food_movie_service.delete_additional_food_movie_by_movie_id(
+            id_movie)
+
+        if not delete_relation_between_additional_food_movie_and_movie.IsSuccess:
+            return delete_relation_between_additional_food_movie_and_movie
 
         movie_delete_result = self.__movie_repository.delete(id_movie)
 

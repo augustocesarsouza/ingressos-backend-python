@@ -56,7 +56,7 @@ class MovieRegionTicketsPurchesedService(IMovieRegionTicketsPurchesedService):
         movie_region_tickets_data: MovieRegionTicketsPurchesedDTO = result_get_movie_region.Data
 
         movie_region_tickets_data.tickets_seats_value(
-            movie_region_tickets_purchesed_dto.TicketsSeats, movie_region_tickets_data.TicketsSeats)
+            movie_region_tickets_purchesed_dto.TicketsSeats, movie_region_tickets_data["ticketsSeats"])
 
         result_update = self.__movie_region_tickets_purchesed_repository.update(
             movie_region_tickets_data)

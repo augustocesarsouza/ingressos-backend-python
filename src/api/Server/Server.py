@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from src.api.Routes.UserRoutes import user_routes_bp
 from src.api.Routes.AdditionalInfoRoutes import additional_info_routes_bp
 from src.api.Routes.MovieRoutes import movie_routes_bp
@@ -11,6 +12,8 @@ from src.api.Routes.FormOfPaymentRoutes import form_of_payment_routes_bp
 from src.api.Routes.AdditionalFoodMovieRoutes import additional_food_movie_routes_bp
 
 app = Flask(__name__)
+CORS(app, resources={r"/v1/*": {"origins": "http://localhost:6400",
+     "methods": ["GET", "POST"]}})
 
 app.register_blueprint(user_routes_bp)
 app.register_blueprint(additional_info_routes_bp)

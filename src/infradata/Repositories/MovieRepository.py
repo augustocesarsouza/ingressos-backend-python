@@ -76,14 +76,22 @@ class MovieRepository(IMovieRepository):
         with ApplicationDbContext() as database:
             try:
                 database.session.begin()
-                user: MovieMap = (
+                movie: MovieMap = (
                     database.session
                     .query(MovieMap.Id, MovieMap.Title, MovieMap.Description, MovieMap.Gender, MovieMap.Duration, MovieMap.MovieRating, MovieMap.ImgUrl, MovieMap.ImgUrlBackground)
                     .filter(MovieMap.Id == id_movie)
                     .first()
                 )
                 database.session.commit()
-                return ResponseWrapper.ok(user)
+
+                if movie != None:
+                    movie_dto = MovieDTO(id=movie.Id, title=movie.Title, description=movie.Description, gender=movie.Gender, duration=movie.Duration, movieRating=movie.MovieRating, imgUrl=movie.ImgUrl, publicId=None,
+                                         imgUrlBackground=movie.ImgUrlBackground, publicIdImgBackgound=None, statusMovie=None, base_64_img=None).to_dict()
+
+                    return ResponseWrapper.ok(movie_dto)
+                else:
+                    return ResponseWrapper.ok(movie)
+                # return ResponseWrapper.ok(user)
             except SQLAlchemyError as exception:
                 database.session.rollback()
                 exception_name = type(exception).__name__
@@ -102,10 +110,16 @@ class MovieRepository(IMovieRepository):
                 )
                 database.session.commit()
 
-                movie_dto = MovieDTO(movie.Id, movie.Title, movie.Description, movie.Gender,
-                                     movie.Duration, movie.MovieRating, movie.ImgUrl, None, None, None, movie.StatusMovie, None)
+                if movie != None:
 
-                return ResponseWrapper.ok(movie_dto.to_dict())
+                    movie_dto = MovieDTO(id=movie.Id, title=movie.Title, description=movie.Description, gender=movie.Gender, duration=movie.Duration,
+                                         movieRating=movie.MovieRating, imgUrl=movie.ImgUrl, publicId=None, imgUrlBackground=None, publicIdImgBackgound=None,
+                                         statusMovie=None, base_64_img=None).to_dict()
+
+                    return ResponseWrapper.ok(movie_dto)
+                else:
+                    return ResponseWrapper.ok(movie)
+
             except SQLAlchemyError as exception:
                 database.session.rollback()
                 exception_name = type(exception).__name__
@@ -144,20 +158,24 @@ class MovieRepository(IMovieRepository):
                     ).all()
                 )
                 # já funciona estou pegando a lista de filme de cada região já
-
-                array = []
-
-                for item in theatres:
-                    obj = {
-                        "id": item.Id,
-                        "title": item.Title,
-                        "imgUrl": item.ImgUrl,
-                        "movieRating": item.MovieRating
-                    }
-                    array.append(obj)
-
                 database.session.commit()
-                return ResponseWrapper.ok(array)
+
+                if theatres != None:
+                    array = []
+
+                    for item in theatres:
+                        obj = {
+                            "id": item.Id,
+                            "title": item.Title,
+                            "imgUrl": item.ImgUrl,
+                            "movieRating": item.MovieRating
+                        }
+                        array.append(obj)
+
+                    return ResponseWrapper.ok(array)
+                else:
+                    return ResponseWrapper.ok(theatres)
+
             except SQLAlchemyError as exception:
                 database.session.rollback()
                 exception_name = type(exception).__name__
