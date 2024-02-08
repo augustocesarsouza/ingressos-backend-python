@@ -9,6 +9,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-.SqlData
-SqlData
-/SqlData
+.MySql
+MySql
+/MySql
